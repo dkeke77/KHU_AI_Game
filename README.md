@@ -11,7 +11,7 @@
 
 프리팹 **Sword_Man_Origin**은 캐릭터의 원본 프리팹입니다.
 
-AI를 추가할 때, 해당 프리팹을 직접 수정하기보다, **프리팹 Variant**를 활용하길 권장합니다.
+캐릭터에 AI를 추가할 때, 해당 프리팹을 직접 수정하기보다, **프리팹 Variant**를 활용하길 권장합니다.
 
 ![Image](https://github.com/user-attachments/assets/b960bbfa-4650-4412-ae6e-c610cf8a300b)
 
