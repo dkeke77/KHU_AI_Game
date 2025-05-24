@@ -39,7 +39,10 @@ AI를 추가할 때, 해당 프리팹을 직접 수정하기보다, **프리팹 
 |Defence()|CanDefence()|
 |Dodge()|CanDodge()|
 
-<작성 예시 이미지>
+```c#
+if (core.CanAttack())
+ core.StartAttack();
+```
 
 동작을 호출하기 전에는 위와 동작 가능여부를 확인하길 권장합니다.
 
