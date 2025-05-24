@@ -29,7 +29,7 @@ public class CharacterController : MonoBehaviour
         else if (Input.GetButtonDown("Dodge") && core.CanDodge())
             core.StartDodge();
         else if (core.CanMove())
-            core.HandleMovementInput(hAxis, vAxis);
+            core.HandleMovement(hAxis, vAxis);
 
     }
 }

@@ -69,9 +69,9 @@ public class CharacterCore : MonoBehaviour
     {
         return state == PlayerState.Idle || state == PlayerState.Moving;
     }
-    public void HandleMovementInput(float hAxis, float vAxis)
+    public void HandleMovement(float xAxis, float zAxis)
     {
-        moveVec = new Vector3(hAxis, 0, vAxis).normalized;
+        moveVec = new Vector3(xAxis, 0, zAxis).normalized;
 
         if (moveVec != Vector3.zero)
         {

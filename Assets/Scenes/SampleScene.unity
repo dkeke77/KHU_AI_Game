@@ -500,7 +500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8600806766171995632, guid: 4772c9864dce4d4438beacd98e5a3bae, type: 3}
       propertyPath: m_Name
-      value: Sword_Man_BT
+      value: Sword_Man_AttackTest
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -40,7 +40,7 @@ public class CharacterInfo : MonoBehaviour
 
     // Cooldowns
     public bool CanAttack => core.CanAttack();
-    public bool CanDefend => core.CanDefence();
+    public bool CanDefence => core.CanDefence();
     public bool CanDodge => core.CanDodge();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -53,7 +53,7 @@ public class CharacterInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public Vector3? GetJointPosition(string jointName)
