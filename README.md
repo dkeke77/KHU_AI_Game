@@ -13,7 +13,7 @@
 
 AI를 추가할 때, 해당 프리팹을 직접 수정하기보다, **프리팹 Variant**를 활용하길 권장합니다.
 
-<프리팹 Variant 이미지>
+![<프리팹 Variant 이미지>](https://github.com/user-attachments/assets/8339fa97-8911-49f2-b10a-29bfcf78bcaf)
 
 프리팹 Variant는 **Sword_Man_Origin** 우클릭 -> Create 선택 -> Prefab Variant 선택
 
