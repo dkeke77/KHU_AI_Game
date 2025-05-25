@@ -28,6 +28,15 @@
 
 캐릭터의 모든 기능은 **core** 스크립트에 구현되어있으며 해당 스크립트를 통해 동작을 호출할 수 있습니다.
 
+```c#
+CharacterCore core;
+void Start()
+{
+    core = GetComponent<CharacterCore>();
+}
+```
+core를 호출하시려면 상속받기보다 **GetComponent<CharacterCore>()**를 통해 해당 인스턴스를 가져오길 권장합니다.
+
 또한 모든 동작에는 "해당 동작을 할 수 있는 상태인지 확인하는 함수"가 있습니다.
 
 캐릭터에 "구현된 동작"과 "그 동작이 가능한지 확인하는 함수"는 아래와 같습니다.
