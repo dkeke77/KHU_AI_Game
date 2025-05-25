@@ -15,6 +15,6 @@ public class JustAttack : MonoBehaviour
     void Update()
     {
         if (core.CanAttack())
-            core.StartAttack();
+            core.Attack();
     }
 }

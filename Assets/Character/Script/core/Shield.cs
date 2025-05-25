@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shield : MonoBehaviour
 {
     public BoxCollider sheildArea;
-    public float activationTime = 0.8f;
+    public float activationTime =1.5f;
 
     public void use()
     {

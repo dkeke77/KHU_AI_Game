@@ -84,6 +84,34 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.ctime1
+      value: 54972
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key0.b
+      value: 0.1490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key0.g
+      value: 0.47741905
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.b
+      value: 0.6046636
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.g
+      value: 0.6186269
+      objectReference: {fileID: 0}
+    - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key1.r
+      value: 0.8113208
+      objectReference: {fileID: 0}
+    - target: {fileID: 9008779978217396580, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_MaxParticleSize
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

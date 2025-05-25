@@ -27,6 +27,7 @@ public class CharacterCore : MonoBehaviour
     Weapon sword;
     Shield shld;
     CharacterCollideChecker chCllChecker;
+    ParticleSystem blockEffect;
 
     const float ACTION_COOLDOWN = 0.5f;
     const float DODGE_COOLDOWN = 9.0f;
@@ -47,6 +48,7 @@ public class CharacterCore : MonoBehaviour
         sword = GetComponentInChildren<Weapon>();
         shld = GetComponentInChildren<Shield>();
         chCllChecker = GetComponentInChildren<CharacterCollideChecker>();
+        blockEffect = GetComponentInChildren<ParticleSystem>();
 
         actionTimer = ACTION_COOLDOWN;
         dodgeTimer = DODGE_COOLDOWN;
@@ -91,14 +93,14 @@ public class CharacterCore : MonoBehaviour
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
         return actionTimer > ACTION_COOLDOWN && stateCheck;
     }
-    public void StartAttack()
+    public void Attack()
     {
         state = PlayerState.Attacking;
         anim.SetTrigger("doAttack");
         sword.use();
         Invoke(nameof(EndAttack), sword.activationTime + 0.4f);
     }
-    public void EndAttack()
+    void EndAttack()
     {
         state = PlayerState.Idle;
         actionTimer = 0f;
@@ -109,15 +111,15 @@ public class CharacterCore : MonoBehaviour
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
         return actionTimer > ACTION_COOLDOWN && stateCheck;
     }
-    public void StartDefence()
+    public void Defence()
     {
         state = PlayerState.Defending;
         isBlocking = true;
         anim.SetTrigger("doDefence");
         shld.use();
-        Invoke(nameof(EndDefence), shld.activationTime + 1.1f);
+        Invoke(nameof(EndDefence), shld.activationTime + 0.4f);
     }
-    public void EndDefence()
+    void EndDefence()
     {
         isBlocking = false;
         anim.SetTrigger("releaseDefence");
@@ -130,7 +132,7 @@ public class CharacterCore : MonoBehaviour
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
         return actionTimer > ACTION_COOLDOWN && stateCheck;
     }
-    public void StartDodge()
+    public void Dodge()
     {
         state = PlayerState.Dodging;
         isDodging = true;
@@ -170,7 +172,10 @@ public class CharacterCore : MonoBehaviour
             if (isDodging)
                 dodgeCounter++;
             else if (isBlocking)
+            {
                 blockCounter++;
+                blockEffect.Play();
+            }
             else
             {
                 Weapon wpn = other.GetComponent<Weapon>();

@@ -23,11 +23,11 @@ public class CharacterController : MonoBehaviour
         vAxis = Input.GetAxisRaw("Vertical");
 
         if (Input.GetButtonDown("Attack") && core.CanAttack())
-            core.StartAttack();
+            core.Attack();
         else if (Input.GetButtonDown("Defence") && core.CanDefence())
-            core.StartDefence();
+            core.Defence();
         else if (Input.GetButtonDown("Dodge") && core.CanDodge())
-            core.StartDodge();
+            core.Dodge();
         else if (core.CanMove())
             core.HandleMovement(hAxis, vAxis);
 
