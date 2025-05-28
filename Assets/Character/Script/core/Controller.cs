@@ -30,6 +30,5 @@ public class CharacterController : MonoBehaviour
             core.Dodge();
         else if (core.CanMove())
             core.HandleMovement(hAxis, vAxis);
-
     }
 }
