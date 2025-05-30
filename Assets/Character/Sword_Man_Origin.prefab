@@ -4933,7 +4933,7 @@ GameObject:
   - component: {fileID: -8558710915257512963}
   m_Layer: 0
   m_Name: Sword_Man_Origin
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4998,6 +4998,10 @@ MonoBehaviour:
   cur_hp: 100
   dodgeCounter: 0
   blockCounter: 0
+  attackTimer: 0
+  defenceTimer: 0
+  dodgeTimer: 0
+  isAttacking: 0
   isDodging: 0
   isBlocking: 0
   isDead: 0
@@ -5152,7 +5156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ef1ec73910f3c4ca3f1e7a24fab371, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 100
+  damage: 10
   meleeArea: {fileID: 4110799347233019671}
   activationTime: 1
 --- !u!1001 &1622951634689443850
@@ -5275,9 +5279,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9fbaeea169cb26b4a885eb746de583ad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7178741155098621301}
-    - targetCorrespondingSourceObject: {fileID: -1996471662184344498, guid: 9fbaeea169cb26b4a885eb746de583ad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8320824349678085812}
   m_SourcePrefab: {fileID: 100100000, guid: 9fbaeea169cb26b4a885eb746de583ad, type: 3}
 --- !u!4 &1229298619328278497 stripped
 Transform:
@@ -5321,23 +5322,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9175088765034030054, guid: 9fbaeea169cb26b4a885eb746de583ad, type: 3}
   m_PrefabInstance: {fileID: 1622951634689443850}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8272824926114913348 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1996471662184344498, guid: 9fbaeea169cb26b4a885eb746de583ad, type: 3}
-  m_PrefabInstance: {fileID: 1622951634689443850}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8320824349678085812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8272824926114913348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36ef1ec73910f3c4ca3f1e7a24fab371, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 10
-  meleeArea: {fileID: 4110799347233019671}
-  activationTime: 1

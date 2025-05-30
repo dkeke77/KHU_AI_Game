@@ -52,8 +52,63 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sword_Man_Offensive_BT
       objectReference: {fileID: 0}
+    - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_TagString
+      value: Character
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2661760544757119488}
+    - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2878412844045324432}
   m_SourcePrefab: {fileID: 100100000, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+--- !u!1 &5299529658789141062 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+  m_PrefabInstance: {fileID: 1520066175521134171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-2661760544757119488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5299529658789141062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df7553b598cdafa4683742451e223cf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  core: {fileID: 0}
+  enemy: {fileID: 0}
+  agent: {fileID: 2878412844045324432}
+  attackRange: 2
+  enemyIsBlocking: 0
+  enemyDefenceTimer: 0
+--- !u!195 &2878412844045324432
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5299529658789141062}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

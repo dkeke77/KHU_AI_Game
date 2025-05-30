@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Character
       objectReference: {fileID: 0}
     - target: {fileID: 8652742702810587372, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: InitialModule.startColor.maxGradient.ctime1
