@@ -29,15 +29,26 @@ public class CharacterCore : MonoBehaviour
     CharacterCollideChecker chCllChecker;
     ParticleSystem blockEffect;
 
-    const float ACTION_COOLDOWN = 0.5f;
-    const float DODGE_COOLDOWN = 9.0f;
-    float actionTimer = 0f;
-    float dodgeTimer = 0f;
+    //const float ACTION_COOLDOWN = 0.5f;
+    //float actionTimer = 0f;
 
+    // 공격/방어 쿨타임 추가
+    const float ATTACK_COOLDOWN = 2.5f;
+    const float DEFENCE_COOLDOWN = 2.5f;
+    const float DODGE_COOLDOWN = 5.0f;
+    
+
+    // 공격/방어 타이머 추가
+    public float attackTimer = 0f;
+    public float defenceTimer = 0f;
+    public float dodgeTimer = 0f;
+
+    // 액션 flag 추가
+    public bool isAttacking = false;
     public bool isDodging = false;
     public bool isBlocking = false;
-
     public bool isDead = false;
+
     public bool isCollideWithCharacter = false;
 
     public PlayerState state = PlayerState.Idle;
@@ -50,16 +61,23 @@ public class CharacterCore : MonoBehaviour
         chCllChecker = GetComponentInChildren<CharacterCollideChecker>();
         blockEffect = GetComponentInChildren<ParticleSystem>();
 
-        actionTimer = ACTION_COOLDOWN;
-        dodgeTimer = DODGE_COOLDOWN;
+        // 수정
+        //attackTimer = 0;
+        //defenceTimer = 0;
+        //dodgeTimer = 0;
     }
 
     void Update()
     {
         if (isDead) return;
 
-        actionTimer += Time.deltaTime;
-        dodgeTimer += Time.deltaTime;
+        // 수정
+        attackTimer -= Time.deltaTime;
+        if (attackTimer < 0f) attackTimer = 0f;
+        defenceTimer -= Time.deltaTime;
+        if (defenceTimer < 0f) defenceTimer = 0f;
+        dodgeTimer -= Time.deltaTime;
+        if (dodgeTimer < 0f) dodgeTimer = 0f;
 
         isCollideWithCharacter = chCllChecker.isCollideWithCharacter && !isDead;
 
@@ -91,54 +109,65 @@ public class CharacterCore : MonoBehaviour
     public bool CanAttack()
     {
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
-        return actionTimer > ACTION_COOLDOWN && stateCheck;
+        return attackTimer <= 0 && stateCheck; // 수정
     }
     public void Attack()
     {
-        state = PlayerState.Attacking;
-        anim.SetTrigger("doAttack");
-        sword.use();
-        Invoke(nameof(EndAttack), sword.activationTime + 0.4f);
+        if (CanAttack()) // 추가
+        {
+            state = PlayerState.Attacking;
+            isAttacking = true; // 추가
+            anim.SetTrigger("doAttack");
+            sword.use();
+            Invoke(nameof(EndAttack), sword.activationTime + 0.4f);
+        }
     }
     void EndAttack()
     {
+        isAttacking = false; // 추가
         state = PlayerState.Idle;
-        actionTimer = 0f;
+        attackTimer = ATTACK_COOLDOWN; // 수정
     }
 
     public bool CanDefence()
     {
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
-        return actionTimer > ACTION_COOLDOWN && stateCheck;
+        return defenceTimer <= 0 && stateCheck; // 수정
     }
     public void Defence()
     {
-        state = PlayerState.Defending;
-        isBlocking = true;
-        anim.SetTrigger("doDefence");
-        shld.use();
-        Invoke(nameof(EndDefence), shld.activationTime + 0.4f);
+        if (CanDefence()) // 추가
+        {
+            state = PlayerState.Defending;
+            isBlocking = true;
+            anim.SetTrigger("doDefence");
+            shld.use();
+            Invoke(nameof(EndDefence), shld.activationTime + 0.4f);
+        }
     }
     void EndDefence()
     {
         isBlocking = false;
         anim.SetTrigger("releaseDefence");
         state = PlayerState.Idle;
-        actionTimer = 0f;
+        defenceTimer = DEFENCE_COOLDOWN; // 수정
     }
 
     public bool CanDodge()
     {
         bool stateCheck = state == PlayerState.Idle || state == PlayerState.Moving;
-        return actionTimer > ACTION_COOLDOWN && stateCheck;
+        return dodgeTimer <= 0 && stateCheck; // 수정
     }
     public void Dodge()
     {
-        state = PlayerState.Dodging;
-        isDodging = true;
-        dodgeVec = transform.forward;
-        anim.SetTrigger("doDodge");
-        StartCoroutine(DodgeMove());
+        if (CanDodge()) // 추가
+        {
+            state = PlayerState.Dodging;
+            isDodging = true;
+            dodgeVec = transform.forward;
+            anim.SetTrigger("doDodge");
+            StartCoroutine(DodgeMove());
+        }
     }
 
     System.Collections.IEnumerator DodgeMove()
@@ -155,18 +184,25 @@ public class CharacterCore : MonoBehaviour
         }
         isDodging = false;
         state = PlayerState.Idle;
-        dodgeTimer = 0f;
+        dodgeTimer = DODGE_COOLDOWN;
     }
 
     void Die()
     {
         state = PlayerState.Dead;
         isDead = true;
-        anim.SetBool("isDead",true);
+        if (anim != null) // 추가
+            anim.SetBool("isDead",true);
+
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+            col.enabled = false; // 추가
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (isDead) return; // 추가
+
         if (other.CompareTag("Weapon") && !isDead)
         {
             if (isDodging)
@@ -174,14 +210,21 @@ public class CharacterCore : MonoBehaviour
             else if (isBlocking)
             {
                 blockCounter++;
-                blockEffect.Play();
+                if (blockEffect != null) // 추가
+                    blockEffect.Play();
             }
             else
             {
                 Weapon wpn = other.GetComponent<Weapon>();
+                if (wpn == null) return; // 추가
+
                 cur_hp -= wpn.damage;
-                anim.SetTrigger("hit");
+                if (anim != null) // 추가
+                    anim.SetTrigger("hit");
                 Debug.Log("HIT!!");
+
+                // 디버그용
+                Debug.Log("Weapon Trigger: " + other.name);
             }
         }
      }
