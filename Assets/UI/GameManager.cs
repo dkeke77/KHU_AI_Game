@@ -4,72 +4,72 @@
 // -> Scene 안에 하나뿐인 GameManager가 생성되고, 모든 전투 로직과 결과 UI를 이 오브젝트 하나로 관리.
 //
 
-//using UnityEngine;
-//using TMPro;
+using UnityEngine;
+using TMPro;
 
-//public class GameManager : MonoBehaviour
-//{
-//    public HealthSystem playerHS;
-//    public HealthSystem enemyHS;
+public class GameManager : MonoBehaviour
+{
+    //public HealthSystem playerHS;
+    //public HealthSystem enemyHS;
 
-//    public TextMeshProUGUI winCountPlayer;
-//    public TextMeshProUGUI winCountEnemy;
+    public TextMeshProUGUI winCountPlayer;
+    public TextMeshProUGUI winCountEnemy;
 
-//    public GameObject resultPanel;
-//    public TextMeshProUGUI resultText;
+    public GameObject resultPanel;
+    public TextMeshProUGUI resultText;
 
-//    private int winsPlayer = 0;
-//    private int winsEnemy = 0;
+    private int winsPlayer = 0;
+    private int winsEnemy = 0;
 
-//    void Start()
-//    {
-//        // 체력 0 이벤트 구독
-//        playerHS.OnDead.AddListener(OnPlayerDead);
-//        enemyHS.OnDead.AddListener(OnEnemyDead);
+    void Start()
+    {
+        // 체력 0 이벤트 구독
+        //playerHS.OnDead.AddListener(OnPlayerDead);
+        //enemyHS.OnDead.AddListener(OnEnemyDead);
 
-//        // 초기 UI
-//        resultPanel.SetActive(false);
-//        UpdateWinCountUI();
-//    }
+        // 초기 UI
+        resultPanel.SetActive(false);
+        UpdateWinCountUI();
+    }
 
-//    private void OnPlayerDead()
-//    {
-//        // 적 승리
-//        winsEnemy++;
-//        ShowResult("Defense Agent"); // Enemy
-//    }
+    private void OnPlayerDead()
+    {
+        // 적 승리
+        winsEnemy++;
+        ShowResult("Defense Agent"); // Enemy
+    }
 
-//    private void OnEnemyDead()
-//    {
-//        // 플레이어 승리
-//        winsPlayer++;
-//        ShowResult("Attack Agent"); // Player
-//    }
+    private void OnEnemyDead()
+    {
+        // 플레이어 승리
+        winsPlayer++;
+        ShowResult("Attack Agent"); // Player
+    }
 
-//    private void ShowResult(string winner)
-//    {
-//        // 결과 패널 표시
-//        resultText.text = $"WINNER: {winner}";
-//        resultPanel.SetActive(true);
+    private void ShowResult(string winner)
+    {
+        // 결과 패널 표시
+        resultText.text = $"WINNER: {winner}";
+        resultPanel.SetActive(true);
 
-//        // 승리 횟수 갱신
-//        UpdateWinCountUI();
+        // 승리 횟수 갱신
+        UpdateWinCountUI();
 
-//        // 자동 리셋 혹은 버튼 대기
-//        Invoke(nameof(RestartMatch), 2.0f);
-//    }
+        // 자동 리셋 혹은 버튼 대기
+        Invoke(nameof(RestartMatch), 2.0f);
+    }
 
-//    private void UpdateWinCountUI()
-//    {
-//        winCountPlayer.text = winsPlayer.ToString();
-//        winCountEnemy.text = winsEnemy.ToString();
-//    }
+    private void UpdateWinCountUI()
+    {
+        winCountPlayer.text = winsPlayer.ToString();
+        winCountEnemy.text = winsEnemy.ToString();
+    }
 
-//    private void RestartMatch()
-//    {
-//        // 패널 끄고 체력 리셋
-//        resultPanel.SetActive(false);
-//        playerHS.Heal(playerHS.maxHP);
-//        enemyHS.Heal(enemyHS.maxHP);
-//    }
-//}
+    private void RestartMatch()
+    {
+        // 패널 끄고 체력 리셋
+        resultPanel.SetActive(false);
+        //playerHS.Heal(playerHS.maxHP);
+        //enemyHS.Heal(enemyHS.maxHP);
+    }
+}

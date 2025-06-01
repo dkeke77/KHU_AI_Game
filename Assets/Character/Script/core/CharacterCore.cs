@@ -218,11 +218,10 @@ public class CharacterCore : MonoBehaviour
                 Weapon wpn = other.GetComponent<Weapon>();
                 if (wpn == null) return; // 추가
 
-                //cur_hp -= wpn.damage;
-                cur_hp -= 10;
+                cur_hp -= wpn.damage;
                 if (anim != null) // 추가
                     anim.SetTrigger("hit");
-                Debug.Log("HIT!!" + sword.damage);
+                Debug.Log("HIT!!" + wpn.damage);
 
                 // 디버그용
                 Debug.Log("Weapon Trigger: " + other.name);
