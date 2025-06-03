@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6415854642650624188
+--- !u!1001 &5680466393445633799
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -48,29 +48,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1388946839953078397, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: de155ec1e07f4ab4c815753a965e66e5, type: 2}
-    - target: {fileID: 2251258172256038043, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: de155ec1e07f4ab4c815753a965e66e5, type: 2}
-    - target: {fileID: 4431940420724625831, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: de155ec1e07f4ab4c815753a965e66e5, type: 2}
-    - target: {fileID: 4877189188482335838, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: de155ec1e07f4ab4c815753a965e66e5, type: 2}
     - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_Name
-      value: Sword_Man_Defensive_BT
-      objectReference: {fileID: 0}
-    - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-      propertyPath: m_TagString
-      value: Character
+      value: Sword_ManRL_Test
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -78,53 +58,76 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5490045585030628297}
+      addedObject: {fileID: 6321065758129080102}
     - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7549800429515722300}
+      addedObject: {fileID: 601930580598742650}
+    - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8816987362773958233}
   m_SourcePrefab: {fileID: 100100000, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
---- !u!1 &403736037705858209 stripped
+--- !u!1 &1317012693690811162 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
-  m_PrefabInstance: {fileID: 6415854642650624188}
+  m_PrefabInstance: {fileID: 5680466393445633799}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5490045585030628297
+--- !u!114 &6321065758129080102
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403736037705858209}
+  m_GameObject: {fileID: 1317012693690811162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ef733b82f9142440aa9d9688c84d616, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  core: {fileID: 0}
-  enemy: {fileID: 0}
-  agent: {fileID: 7549800429515722300}
-  attackRange: 2
-  enemyIsAttacking: 0
-  enemyAttackTimer: 0
---- !u!195 &7549800429515722300
-NavMeshAgent:
+  m_BrainParameters:
+    VectorObservationSize: 28
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 04000000
+    VectorActionSize: 
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: RL_Test
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &601930580598742650
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403736037705858209}
+  m_GameObject: {fileID: 1317012693690811162}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f10378fa3c9f444b02c60b6fc77166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 5000
+--- !u!114 &8816987362773958233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317012693690811162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 3
+  TakeActionsBetweenDecisions: 1

@@ -26,11 +26,11 @@ public class Defensive_BT : MonoBehaviour
     private const float FLEE_DURATION = 3.0f;
 
     void Start()
-    {
+    {/*
         // 랜덤 스폰 위치 설정
         float randX = Random.Range(-10f, -5f);
         float randZ = Random.Range(-5f, 5f);
-        transform.position = new Vector3(randX, transform.position.y, randZ);
+        transform.position = new Vector3(randX, transform.position.y, randZ);*/
 
         if (core == null)
             core = GetComponent<CharacterCore>();
@@ -63,11 +63,11 @@ public class Defensive_BT : MonoBehaviour
 
         if (agent != null && core != null)
             agent.speed = core.speed;
-
+        /*
         // 시작하자마자 공격/방어/구르기 불가
         core.attackTimer = 1.0f;
         core.defenceTimer = 1.0f;
-        core.dodgeTimer = 1.0f;
+        core.dodgeTimer = 1.0f;*/
     }
 
     void Update()

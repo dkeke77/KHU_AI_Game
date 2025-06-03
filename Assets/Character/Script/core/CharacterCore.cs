@@ -199,6 +199,21 @@ public class CharacterCore : MonoBehaviour
             col.enabled = false; // 추가
     }
 
+    public void Spawn()
+    {
+        // 랜덤 스폰 위치 설정
+        float randX = Random.Range(-10f, -5f);
+        float randZ = Random.Range(-5f, 5f);
+        transform.position = new Vector3(randX, transform.position.y, randZ);
+
+        // 시작하자마자 공격/방어/구르기 불가
+        attackTimer = 1.0f;
+        defenceTimer = 1.0f;
+        dodgeTimer = 1.0f;
+
+        cur_hp = MAX_HP;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (isDead) return; // 추가

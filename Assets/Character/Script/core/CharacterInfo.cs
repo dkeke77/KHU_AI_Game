@@ -42,6 +42,10 @@ public class CharacterInfo : MonoBehaviour
     public bool CanAttack => core.CanAttack();
     public bool CanDefence => core.CanDefence();
     public bool CanDodge => core.CanDodge();
+    public float AttackTimer => core.attackTimer;
+    public float DefenceTimer => core.defenceTimer;
+    public float DodgeTimer => core.dodgeTimer;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
