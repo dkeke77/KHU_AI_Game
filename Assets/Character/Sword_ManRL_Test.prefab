@@ -58,20 +58,45 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6321065758129080102}
+      addedObject: {fileID: -3978667466504816970}
     - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 601930580598742650}
+      addedObject: {fileID: 6103233520798619664}
     - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8816987362773958233}
+      addedObject: {fileID: 8301381924133438890}
+    - targetCorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7265240359745350991}
   m_SourcePrefab: {fileID: 100100000, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
 --- !u!1 &1317012693690811162 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
   m_PrefabInstance: {fileID: 5680466393445633799}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6321065758129080102
+--- !u!195 &-3978667466504816970
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317012693690811162}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &6103233520798619664
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,24 +109,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 28
+    VectorObservationSize: 1
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 2
-      BranchSizes: 04000000
-    VectorActionSize: 
+      m_NumContinuousActions: 0
+      BranchSizes: 01000000
+    VectorActionSize: 01000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: RL_Test
+  m_BehaviorName: My Behavior
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &601930580598742650
+--- !u!114 &8301381924133438890
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,14 +135,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1317012693690811162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87f10378fa3c9f444b02c60b6fc77166, type: 3}
+  m_Script: {fileID: 11500000, guid: 48d4eca67afebc947acd165f46946b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
---- !u!114 &8816987362773958233
+  MaxStep: 0
+  core: {fileID: 0}
+  enemyTransform: {fileID: 0}
+  agent: {fileID: 0}
+  maxMapExtent: 10
+  attackRange: 2
+--- !u!114 &-7265240359745350991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,5 +159,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 3
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1

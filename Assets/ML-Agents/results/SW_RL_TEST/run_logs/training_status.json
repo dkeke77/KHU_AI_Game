@@ -1,0 +1,38 @@
+{
+    "OffensiveAgentPolicy": {
+        "checkpoints": [
+            {
+                "steps": 499939,
+                "file_path": "results\\SW_RL_TEST\\OffensiveAgentPolicy\\OffensiveAgentPolicy-499939.onnx",
+                "reward": null,
+                "creation_time": 1748971789.622944,
+                "auxillary_file_paths": [
+                    "results\\SW_RL_TEST\\OffensiveAgentPolicy\\OffensiveAgentPolicy-499939.pt"
+                ]
+            },
+            {
+                "steps": 500003,
+                "file_path": "results\\SW_RL_TEST\\OffensiveAgentPolicy\\OffensiveAgentPolicy-500003.onnx",
+                "reward": null,
+                "creation_time": 1748971789.6481373,
+                "auxillary_file_paths": [
+                    "results\\SW_RL_TEST\\OffensiveAgentPolicy\\OffensiveAgentPolicy-500003.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500003,
+            "file_path": "results\\SW_RL_TEST\\OffensiveAgentPolicy.onnx",
+            "reward": null,
+            "creation_time": 1748971789.6481373,
+            "auxillary_file_paths": [
+                "results\\SW_RL_TEST\\OffensiveAgentPolicy\\OffensiveAgentPolicy-500003.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.7.0+cpu"
+    }
+}
