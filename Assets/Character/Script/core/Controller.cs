@@ -10,6 +10,8 @@ public class CharacterController : MonoBehaviour
     float hAxis;
     float vAxis;
 
+    bool invoked = false;
+
     void Awake()
     {
         core = GetComponent<CharacterCore>();
@@ -30,5 +32,16 @@ public class CharacterController : MonoBehaviour
             core.Dodge();
         else if (core.CanMove())
             core.HandleMovement(hAxis, vAxis);
+
+        if (core.isDead && !invoked)
+        {
+            Invoke(nameof(respawn),5f);
+            invoked = true;
+        }
+    }
+    void respawn()
+    {
+        core.Spawn();
+        invoked = false;
     }
 }

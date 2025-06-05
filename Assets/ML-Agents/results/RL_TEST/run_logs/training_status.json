@@ -2,22 +2,49 @@
     "RL_Test": {
         "checkpoints": [
             {
-                "steps": 4106,
-                "file_path": "results\\RL_TEST\\RL_Test\\RL_Test-4106.onnx",
-                "reward": -20.0,
-                "creation_time": 1748952813.9136593,
+                "steps": 200053,
+                "file_path": "results\\RL_TEST\\RL_Test\\RL_Test-200053.onnx",
+                "reward": -17.055555555555557,
+                "creation_time": 1749062320.7821069,
                 "auxillary_file_paths": [
-                    "results\\RL_TEST\\RL_Test\\RL_Test-4106.pt"
+                    "results\\RL_TEST\\RL_Test\\RL_Test-200053.pt"
+                ]
+            },
+            {
+                "steps": 200053,
+                "file_path": "results\\RL_TEST\\RL_Test\\RL_Test-200053.onnx",
+                "reward": null,
+                "creation_time": 1749062358.877881,
+                "auxillary_file_paths": [
+                    "results\\RL_TEST\\RL_Test\\RL_Test-200053.pt"
+                ]
+            },
+            {
+                "steps": 499965,
+                "file_path": "results\\RL_TEST\\RL_Test\\RL_Test-499965.onnx",
+                "reward": -13.833333333333334,
+                "creation_time": 1749063797.6465244,
+                "auxillary_file_paths": [
+                    "results\\RL_TEST\\RL_Test\\RL_Test-499965.pt"
+                ]
+            },
+            {
+                "steps": 500029,
+                "file_path": "results\\RL_TEST\\RL_Test\\RL_Test-500029.onnx",
+                "reward": -13.833333333333334,
+                "creation_time": 1749063797.6983612,
+                "auxillary_file_paths": [
+                    "results\\RL_TEST\\RL_Test\\RL_Test-500029.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 4106,
+            "steps": 500029,
             "file_path": "results\\RL_TEST\\RL_Test.onnx",
-            "reward": -20.0,
-            "creation_time": 1748952813.9136593,
+            "reward": -13.833333333333334,
+            "creation_time": 1749063797.6983612,
             "auxillary_file_paths": [
-                "results\\RL_TEST\\RL_Test\\RL_Test-4106.pt"
+                "results\\RL_TEST\\RL_Test\\RL_Test-500029.pt"
             ]
         }
     },

@@ -7,82 +7,102 @@ using Unity.MLAgents.Sensors;
 
 public class RL_Agent : Agent
 {
-    // Episode timer
-    private float episodeTimer = 0f;
-    public const float MAX_EPISODE_TIME = 90f;
-
     // Game objects
     Rigidbody rb;
-    Bounds floor;
     CharacterCore core;
-    CharacterInfo me;
+    CharacterInfo thisInfo;
+    public Transform enemy;
     CharacterCore enemyCore;
-    CharacterInfo enemy;
+    CharacterInfo enemyInfo;
 
     // Enemy hit
     float oldEnemyHP;
 
+    bool attackInProgress = false;
+    bool defenceInProgress = false;
+    bool dodgeInProgress = false;
+
+    // 틱 기반 타이머
+    int attackTimer = 0;
+    int defenceTimer = 0;
+    int dodgeTimer = 0;    
+    
+    const int ATTACK_TIME_OUT = 50;
+    const int DEFENCE_TIME_OUT = 75;
+    const int DODGE_TIME_OUT = 75;
+
+    // 행동 성공 확인용
+    int oldAttackSuc = 0;
+    int oldDefenceSuc = 0;
+    int oldDodgekSuc = 0;
+
     public override void Initialize()
     {
         rb = GetComponent<Rigidbody>();
-        floor = GameObject.Find("Floor").GetComponent<MeshCollider>().bounds;
         
         core = GetComponent<CharacterCore>();
-        me = GetComponent<CharacterInfo>();
+        thisInfo = GetComponent<CharacterInfo>();
 
-        GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Character");
-        foreach (var obj in enemyObjs)
+        if (enemy == null)
         {
-            if (obj != this.gameObject)
+            GameObject[] enemyObjs = GameObject.FindGameObjectsWithTag("Character");
+            foreach (var obj in enemyObjs)
             {
-                enemyCore = obj.GetComponent<CharacterCore>();
-                enemy = obj.GetComponent<CharacterInfo>();
+                if (obj != this.gameObject)
+                {
+                    enemyCore = obj.GetComponent<CharacterCore>();
+                    enemyInfo = obj.GetComponent<CharacterInfo>();
+                }
             }
+        }
+        else
+        {
+            enemyCore = enemy.GetComponent<CharacterCore>();
+            enemyInfo = enemy.GetComponent<CharacterInfo>();
         }
     }
 
     public override void OnEpisodeBegin()
     {
-        episodeTimer = 0f;
-        oldEnemyHP = 100f;
+        attackTimer = 0;
+        defenceTimer = 0;
+        dodgeTimer = 0;
 
-        float randX = Random.Range(-10f, -5f);
-        float randZ = Random.Range(-5f, 5f);
-        transform.position = new Vector3(randX, transform.position.y, randZ);
+        oldAttackSuc = 0;
+        oldDefenceSuc = 0;
+        oldDodgekSuc = 0;
 
         core.Spawn();
         enemyCore.Spawn();
+
+        Debug.Log("New Episode Begins");
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // 만약 학습이 느리다면 Position과 Foward에서 불필요한 요소 제거할것
-        sensor.AddObservation(me.Position);
-        sensor.AddObservation(me.Forward);
-        sensor.AddObservation(me.CurrentHP);
-        sensor.AddObservation(me.AttackTimer);
-        sensor.AddObservation(me.DefenceTimer);
-        sensor.AddObservation(me.DodgeTimer);
-        sensor.AddObservation((int)me.CurrentState);
+        sensor.AddObservation(thisInfo.Position.x);
+        sensor.AddObservation(thisInfo.Position.z);
+        sensor.AddObservation(thisInfo.Forward.x);
+        sensor.AddObservation(thisInfo.Forward.z);
+        sensor.AddObservation(thisInfo.CurrentHP / 100);
+        sensor.AddObservation(thisInfo.AttackTimer / 2.5f);
+        sensor.AddObservation(thisInfo.DefenceTimer / 2.5f);
+        sensor.AddObservation(thisInfo.DodgeTimer / 5f);
+        sensor.AddObservation((int)thisInfo.CurrentState);
 
-        sensor.AddObservation(enemy.Position);
-        sensor.AddObservation(enemy.Forward);
-        sensor.AddObservation(enemy.CurrentHP);
-        sensor.AddObservation(enemy.AttackTimer);
-        sensor.AddObservation(enemy.DefenceTimer);
-        sensor.AddObservation(enemy.DodgeTimer);
-        sensor.AddObservation((int)enemy.CurrentState);
+        sensor.AddObservation(enemyInfo.Position.x);
+        sensor.AddObservation(enemyInfo.Position.z);
+        sensor.AddObservation(enemyInfo.Forward.x);
+        sensor.AddObservation(enemyInfo.Forward.z);
+        sensor.AddObservation(enemyInfo.CurrentHP / 100);
+        sensor.AddObservation(enemyInfo.AttackTimer / 2.5f);
+        sensor.AddObservation(enemyInfo.DefenceTimer / 5f);
+        sensor.AddObservation(enemyInfo.DodgeTimer);
+        sensor.AddObservation((int)enemyInfo.CurrentState);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        episodeTimer += Time.deltaTime;
-        if (episodeTimer >= MAX_EPISODE_TIME)
-        {
-            SetReward(0f);
-            EndEpisode();
-        }
-
         int disAction = actions.DiscreteActions[0];
         float xAxis = actions.ContinuousActions[0];
         float zAxis = actions.ContinuousActions[1];
@@ -98,66 +118,110 @@ public class RL_Agent : Agent
             {
                 case 1:
                     if (core.CanAttack())
+                    {
                         core.Attack();
+                        attackInProgress = true;
+                    }
                     break;
                 case 2:
                     if (core.CanDefence())
+                    {
                         core.Defence();
+                        defenceInProgress = true;
+                    }
                     break;
                 case 3:
                     if (core.CanDodge())
+                    {
                         core.Dodge();
+                        dodgeInProgress = true;
+                    }
                     break;
                 default:
                     break;
             }
         }
-
-        // floor 벗어나면 punishment
-        if (floor.Contains(me.Position))
-        {
-            AddReward(-20.0f);
-            EndEpisode();
-        }
-
-        // 사망
-        if (me.IsDead)
-        {
-            AddReward(-10.0f);
-            EndEpisode();
-        }
-        else if (enemy.IsDead)
-        {
-            AddReward(10.0f);
-            EndEpisode();
-        }
-
-        // 공격/방어/회피 성공 시 보상함수
-        if (oldEnemyHP != enemy.CurrentHP)
-            AddReward(1.0f);
-
-        // 피격 확인용 적 HP
-        oldEnemyHP = enemy.CurrentHP;
     }
 
-    bool isOutofFloor()
+    void FixedUpdate()
     {
-        Vector3 chPos = me.Position;
-        chPos.y = 0f;
+        // 사망처리
+        if (thisInfo.IsDead)
+        {
+            AddReward(-2.0f);
+            EndEpisode();
+            return;
+        }
+        else if (enemyInfo.IsDead)
+        {
+            AddReward(3.0f);
+            EndEpisode();
+            return;
+        }
 
-        return floor.Contains(chPos);
+        if (attackInProgress)
+            EvaluateAttackReward();
+        if (defenceInProgress)
+            EvaluateDenfenceReward();
+        if (dodgeInProgress)
+            EvaluateDodgeReward();
+
+        oldAttackSuc = core.attackSucCounter;
+        oldDefenceSuc = core.blockSucCounter;
+        oldDodgekSuc = core.dodgeSucCounter;
     }
 
-    void OnTriggerEnter(Collider other)
+    // 공격 유효 판단 (나중에 리워드/패널티)
+    void EvaluateAttackReward()
     {
-        if (other.CompareTag("Weapon"))
+        attackTimer++;
+        if (oldAttackSuc < core.attackSucCounter)
         {
-            if (core.isDodging)
-                AddReward(0.5f);
-            else if (core.isBlocking)
-                AddReward(0.5f);
-            else
-                AddReward(-1.0f);
+            AddReward(3.0f);
+            attackInProgress = false;
+            attackTimer = 0;
+        }
+        else if (attackTimer >= ATTACK_TIME_OUT)
+        {
+            AddReward(-1.0f);
+            attackInProgress = false;
+            attackTimer = 0;
+        }
+    }
+
+    // 방어 유효 판단 (나중에 리워드/패널티)
+    void EvaluateDenfenceReward()
+    {
+        defenceTimer++;
+        if (oldDefenceSuc < core.blockSucCounter)
+        {
+            AddReward(3.0f);
+            defenceInProgress = false;
+            defenceTimer = 0;
+        }
+        else if (defenceTimer >= DEFENCE_TIME_OUT)
+        {
+            AddReward(-1.0f);
+            defenceInProgress = false;
+            defenceTimer = 0;
+        }
+    }
+
+    // 회피 유효 판단 (나중에 리워드/패널티)
+    void EvaluateDodgeReward()
+    {
+        dodgeTimer++;
+        if (oldDodgekSuc < core.dodgeSucCounter)
+        {
+            AddReward(3.0f);
+            dodgeInProgress = false;
+            dodgeTimer = 0;
+        }
+        else if (dodgeTimer >= DODGE_TIME_OUT)
+        {
+            AddReward(-1.0f);
+            dodgeInProgress = false;
+            dodgeTimer = 0;
         }
     }
 }

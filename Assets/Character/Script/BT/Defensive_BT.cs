@@ -55,9 +55,9 @@ public class Defensive_BT : MonoBehaviour
             }
         }
 
-        if (enemy != null)
+        if (enemy != null && enemyCore == null)
         {
-            enemy = enemy.transform.root;
+            //enemy = enemy.transform.root;
             enemyCore = enemy.GetComponent<CharacterCore>();
         }
 
@@ -72,6 +72,7 @@ public class Defensive_BT : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(core.speed);
         if (core.isDead)
         {
             agent.ResetPath();
@@ -308,7 +309,7 @@ public class Defensive_BT : MonoBehaviour
 
     // 디버그용
     void OnGUI()
-    {
+    {/*
         GUI.Label(new Rect(70, 10, 300, 20), $"Defensive: {core.cur_hp}");
         GUI.Label(new Rect(70, 30, 300, 20), $"Defensive isBlocking: {core.isBlocking}");
         GUI.Label(new Rect(70, 50, 300, 20), $"Defensive isAttacking: {core.isAttacking}");
@@ -317,7 +318,7 @@ public class Defensive_BT : MonoBehaviour
         GUI.Label(new Rect(70, 110, 300, 20), $"Defensive defenceTimer: {core.defenceTimer}");
         GUI.Label(new Rect(70, 130, 300, 20), $"Defensive canDefence: {core.CanDefence()}");
         GUI.Label(new Rect(70, 150, 300, 20), $"Defensive canAttack: {core.CanAttack()}");
-        GUI.Label(new Rect(70, 170, 300, 20), $"Defensive canDodge: {core.CanDodge()}");
+        GUI.Label(new Rect(70, 170, 300, 20), $"Defensive canDodge: {core.CanDodge()}");*/
     }
 }
 

@@ -57,7 +57,7 @@ public class Offensive_BT : MonoBehaviour
 
         if (enemy != null)
         {
-            enemy = enemy.transform.root;
+            //enemy = enemy.transform.root;
             enemyCore = enemy.GetComponent<CharacterCore>();
         }
 

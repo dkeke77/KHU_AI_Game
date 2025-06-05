@@ -48,9 +48,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1896097314184142640, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4110799347233019671, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_Name
       value: Sword_ManRL_Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -84,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 28
+    VectorObservationSize: 18
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -96,7 +116,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: RL_Test
+  m_BehaviorName: RL_Basic
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1

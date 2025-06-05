@@ -48,6 +48,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1388946839953078397, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bac459a8890d3a4da5306e746c0947b, type: 2}
+    - target: {fileID: 2251258172256038043, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bac459a8890d3a4da5306e746c0947b, type: 2}
+    - target: {fileID: 4431940420724625831, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bac459a8890d3a4da5306e746c0947b, type: 2}
+    - target: {fileID: 4877189188482335838, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bac459a8890d3a4da5306e746c0947b, type: 2}
     - target: {fileID: 6670932791263235101, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_Name
       value: Sword_Man_Offensive_BT
