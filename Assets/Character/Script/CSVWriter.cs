@@ -22,37 +22,40 @@ public class CSVWriter : MonoBehaviour
 
     void Start()
     {
-        string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-
-        if (Agent_ATK.GetComponentInChildren<Offensive_BT>() != null)
+        if (activate)
         {
-            Agent_ATK_Type = "BT_ATK";
-        }
-        else
-        {
-            Agent_ATK_Type = "RL_ATK";
-            isRLInArena = true;
-        }
+            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
 
-        if (Agent_DEF.GetComponentInChildren<Defensive_BT>() != null)
-        {
-            Agent_DEF_Type = "BT_DEF";
-        }
-        else
-        {
-            Agent_DEF_Type = "RL_DEF";
-            isRLInArena = true;
-        }
+            if (Agent_ATK.GetComponentInChildren<Offensive_BT>() != null)
+            {
+                Agent_ATK_Type = "BT_ATK";
+            }
+            else
+            {
+                Agent_ATK_Type = "RL_ATK";
+                isRLInArena = true;
+            }
 
-        Agent_ATK_core = Agent_ATK.GetComponent<CharacterCore>();
-        Agent_DEF_core = Agent_DEF.GetComponent<CharacterCore>();
+            if (Agent_DEF.GetComponentInChildren<Defensive_BT>() != null)
+            {
+                Agent_DEF_Type = "BT_DEF";
+            }
+            else
+            {
+                Agent_DEF_Type = "RL_DEF";
+                isRLInArena = true;
+            }
 
-        Arena_name = transform.name;
-        filePath = $"{projectRoot}/CombatData/{Arena_name}--{Agent_DEF_Type}-{Agent_DEF_Type}.csv";
+            Agent_ATK_core = Agent_ATK.GetComponent<CharacterCore>();
+            Agent_DEF_core = Agent_DEF.GetComponent<CharacterCore>();
 
-        if (!File.Exists(filePath))
-        {
-            File.WriteAllText(filePath, string.Format("Winner,{0}-Total_Attack,{0}-Success_Attack,{0}-Total_Defence,{0}-Success_Defence,{0}-Total_Dodge,{0}-Success_Dodge,{1}-Total_Attack,{1}-Success_Attack,{1}-Total_Defence,{1}-Success_Defence,{1}-Total_Dodge,{1}-Success_Dodge",Agent_ATK_Type, Agent_DEF_Type));
+            Arena_name = transform.name;
+            filePath = $"{projectRoot}/CombatData/{Arena_name}--{Agent_DEF_Type}-{Agent_DEF_Type}.csv";
+
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, string.Format("Winner,{0}-Total_Attack,{0}-Success_Attack,{0}-Total_Defence,{0}-Success_Defence,{0}-Total_Dodge,{0}-Success_Dodge,{1}-Total_Attack,{1}-Success_Attack,{1}-Total_Defence,{1}-Success_Defence,{1}-Total_Dodge,{1}-Success_Dodge", Agent_ATK_Type, Agent_DEF_Type));
+            }
         }
     }
 
