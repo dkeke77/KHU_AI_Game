@@ -180,7 +180,7 @@ public class Defensive_BT : MonoBehaviour
                 // 방어 가능 -> 방어 후 방어 타이머 리필
                 if (core.CanDefence())
                 {
-                    core.HandleMovement(0, 0);
+                    //core.HandleMovement(0, 0);
                     LookAtEnemy();
                     core.Defence();
                     if (agent != null)
@@ -208,8 +208,7 @@ public class Defensive_BT : MonoBehaviour
             case PlayerState.Idle:
             case PlayerState.Moving:
                 Vector3 dir = (enemy.position - transform.position).normalized;
-                float dist = Vector3.Distance(enemy.position, transform.position);
-                if (core.CanMove() && dist > 0.8f)
+                if (core.CanMove() && distanceToEnemy > 0.9f)
                     core.HandleMovement(dir.x, dir.z);
                 if (enemy != null)
                 {
@@ -218,8 +217,8 @@ public class Defensive_BT : MonoBehaviour
                         if (agent != null)
                             agent.SetDestination(enemy.position);
                     }
-                    else
-                        core.HandleMovement(0, 0);
+                    //else
+                        //core.HandleMovement(0, 0);
 
                     // 도망치는 중이 아님
                     if (!isFleeing)
@@ -233,7 +232,7 @@ public class Defensive_BT : MonoBehaviour
                                 // 1. 내가 방어 가능 -> 방어 후 도망
                                 if (core.CanDefence())
                                 {
-                                    core.HandleMovement(0, 0);
+                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Defence();
                                     if (agent != null)
@@ -252,7 +251,7 @@ public class Defensive_BT : MonoBehaviour
                                 // 3. 내가 방어/회피 불가능 + 내가 공격 가능 -> 공격 후 도망
                                 else if(!core.CanDefence() && !core.CanDodge() && core.CanAttack())
                                 {
-                                    core.HandleMovement(0, 0);
+                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)
@@ -275,7 +274,7 @@ public class Defensive_BT : MonoBehaviour
                                 // 5. 내가 공격 가능 -> 공격 후 도망
                                 if (core.CanAttack())
                                 {
-                                    core.HandleMovement(0, 0);
+                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)

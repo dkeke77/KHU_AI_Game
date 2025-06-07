@@ -155,8 +155,7 @@ public class Offensive_BT : MonoBehaviour
             case PlayerState.Idle:
             case PlayerState.Moving:
                 Vector3 dir = (enemy.position - transform.position).normalized;
-                float dist = Vector3.Distance(enemy.position, transform.position);
-                if (core.CanMove() && dist > 0.8f)
+                if (core.CanMove() && distanceToEnemy > 0.9f)
                     core.HandleMovement(dir.x, dir.z);
                 if (enemy != null)
                 {
@@ -166,8 +165,8 @@ public class Offensive_BT : MonoBehaviour
                         if (agent != null)
                             agent.SetDestination(enemy.position);
                     }
-                    else
-                        core.HandleMovement(0, 0);
+                    //else
+                        //core.HandleMovement(0, 0);
 
                     // 도망치는 중 아님
                     if (!isFleeing)
@@ -181,7 +180,7 @@ public class Offensive_BT : MonoBehaviour
                                 // 2. 공격 가능 -> 공격 후 도망
                                 if (core.CanAttack())
                                 {
-                                    core.HandleMovement(0, 0);
+                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)
