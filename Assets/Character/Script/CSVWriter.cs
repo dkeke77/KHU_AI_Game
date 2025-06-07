@@ -62,22 +62,25 @@ public class CSVWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 둘다 BT인 경우
-        if(!isRLInArena && !isLineWrited)
-        {
-            if (Agent_ATK_core.isDead)
+        if (activate) 
+        { 
+            // 둘다 BT인 경우
+            if (!isRLInArena && !isLineWrited)
             {
-                WriteRLCombatData(Agent_DEF.name);
-                isLineWrited = true;
+                if (Agent_ATK_core.isDead)
+                {
+                    WriteRLCombatData(Agent_DEF.name);
+                    isLineWrited = true;
+                }
+                else if (Agent_DEF_core.isDead)
+                {
+                    WriteRLCombatData(Agent_ATK.name);
+                    isLineWrited = true;
+                }
             }
-            else if (Agent_DEF_core.isDead)
-            {
-                WriteRLCombatData(Agent_ATK.name);
-                isLineWrited = true;
-            }
-        }
         // 둘중 하나가 RL이라면 RL쪽에서 에피소드가 종료될때 호출
         // 둘 다 RL이라면 한쪽만 호출되도록 설정해줘야함
+        }
     }
 
     public void WriteRLCombatData(string Winner)

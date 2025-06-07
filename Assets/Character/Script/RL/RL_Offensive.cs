@@ -25,10 +25,13 @@ public class RL_Offensive : Agent
     bool defenceInProgress = false;
     bool dodgeInProgress = false;
 
+    bool attacked = false;
+
     // 틱 기반 타이머
     int attackTimer = 0;
     int defenceTimer = 0;
     int dodgeTimer = 0;    
+    int boundaryTimer = 0;    
     
     const int ATTACK_TIME_OUT = 50;
     const int DEFENCE_TIME_OUT = 75;
@@ -135,7 +138,10 @@ public class RL_Offensive : Agent
                     if (core.CanAttack())
                     {
                         core.Attack();
+                        Debug.Log(CalcAngle());
+
                         attackInProgress = true;
+                        attacked = true;
                     }
                     break;
                 case 2:
@@ -163,80 +169,196 @@ public class RL_Offensive : Agent
         // 사망처리
         if (thisInfo.IsDead)
         {
-            AddReward(-2.0f);
+            AddReward(-3.0f);
             ExecuteEpisodeEnd();
             return;
         }
         else if (enemyInfo.IsDead)
         {
-            AddReward(3.0f);
+            AddReward(5.0f);
             ExecuteEpisodeEnd();
             return;
         }
 
-        if (attackInProgress)
-            EvaluateAttackReward();
-        if (defenceInProgress)
-            EvaluateDenfenceReward();
-        if (dodgeInProgress)
-            EvaluateDodgeReward();
+        // 기본 학습
+        // 상대와 너무 붙지않게
+        if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) < 0.8f)
+        {
+            AddReward(-0.01f);
+        }
+        // 경계에 너무 오래 있을 시
+        if (core.isInBoundary())
+        {
+            boundaryTimer++;
+
+            if (boundaryTimer > 100)
+            {
+                AddReward(-0.001f);
+            }
+            else if (boundaryTimer > 10)
+                AddReward(-0.0005f);
+        }
+        else
+            boundaryTimer = 0;
+
+        // 커리큘럼
+        if (StepCount < 600000)
+        {
+            curriculumLevel0();
+            if (attackInProgress)
+                EvaluateAttackReward(fRwd:1.2f,fPnlt:0.5f);
+            if (defenceInProgress)
+                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 0.8f);
+            if (dodgeInProgress)
+                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 0.8f);
+        }
+        else if (StepCount < 1500000)
+        {
+            curriculumLevel1();
+            if (attackInProgress)
+                EvaluateAttackReward(fRwd: 1.2f, fPnlt: 1.0f);
+            if (defenceInProgress)
+                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 1.0f);
+            if (dodgeInProgress)
+                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 1.0f);
+        }
+        else
+        {
+            curriculumLevel2();
+            if (attackInProgress)
+                EvaluateAttackReward(fRwd: 1.0f, fPnlt: 1.2f);
+            if (defenceInProgress)
+                EvaluateDenfenceReward(fRwd: 1.0f, fPnlt: 1.2f);
+            if (dodgeInProgress)
+                EvaluateDodgeReward(fRwd: 1.0f, fPnlt: 1.2f);
+        }
 
         oldAttackSuc = core.attackSucCounter;
         oldDefenceSuc = core.blockSucCounter;
         oldDodgekSuc = core.dodgeSucCounter;
+
+        attacked = false;
+    }
+
+    void curriculumLevel0()
+    {
+        // 거리 가까우면 리워드
+        if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) < 5.0f)
+        {
+            AddReward(0.0005f);
+        }
+        // 공격방향 리워드
+        if (attacked && CalcAngle() > 0.6f)
+        {
+            AddReward(0.5f);
+        }
+        if (!core.isInBoundary())
+        {
+            AddReward(0.000001f);
+        }
+    }
+
+    void curriculumLevel1()
+    {
+        // 거리 가까우면 리워드
+        if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) < 4.0f)
+        {
+            AddReward(0.00001f);
+        }
+        //공격 관련 처리
+        if (attacked)
+        {
+            // 공격방향 패널티
+            if (CalcAngle() < 0.6f)
+                AddReward(-0.1f);
+
+            // 적 방어/회피 쿨타임 중 공격 시 리워드
+            if (enemyCore.defenceTimer > 0)
+                AddReward(0.3f);
+            if (enemyCore.dodgeTimer > 0)
+                AddReward(0.3f);
+        }
+    }
+
+    void curriculumLevel2()
+    {
+        // 거리 멀면 패널티
+        if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) > 6.0f)
+        {
+            AddReward(-0.00005f);
+        }
+        //공격 관련 처리
+        if (attacked)
+        {
+            // 공격방향 패널티
+            if (CalcAngle() < 0.6f)
+                AddReward(-0.5f);
+
+            // 적 방어/회피 쿨타임 중 공격 시 리워드
+            if (enemyCore.defenceTimer > 0)
+                AddReward(0.25f);
+            if (enemyCore.dodgeTimer > 0)
+                AddReward(0.25f);
+        }
     }
 
     // 공격 유효 판단 (나중에 리워드/패널티)
-    void EvaluateAttackReward()
+    void EvaluateAttackReward(float fRwd = 1.0f, float fPnlt = 1.0f)
     {
         attackTimer++;
         if (oldAttackSuc < core.attackSucCounter)
         {
-            AddReward(3.0f);
+            AddReward(3.0f * fRwd);
             attackInProgress = false;
             attackTimer = 0;
         }
         else if (attackTimer >= ATTACK_TIME_OUT)
         {
-            AddReward(-1.0f);
+            AddReward(-1.0f * fPnlt);
             attackInProgress = false;
             attackTimer = 0;
         }
     }
 
     // 방어 유효 판단 (나중에 리워드/패널티)
-    void EvaluateDenfenceReward()
+    void EvaluateDenfenceReward(float fRwd = 1.0f, float fPnlt = 1.0f)
     {
         defenceTimer++;
         if (oldDefenceSuc < core.blockSucCounter)
         {
-            AddReward(3.0f);
+            AddReward(3.0f * fRwd);
             defenceInProgress = false;
             defenceTimer = 0;
         }
         else if (defenceTimer >= DEFENCE_TIME_OUT)
         {
-            AddReward(-1.0f);
+            AddReward(-1.0f * fPnlt);
             defenceInProgress = false;
             defenceTimer = 0;
         }
     }
 
     // 회피 유효 판단 (나중에 리워드/패널티)
-    void EvaluateDodgeReward()
+    void EvaluateDodgeReward(float fRwd=1.0f, float fPnlt = 1.0f)
     {
         dodgeTimer++;
         if (oldDodgekSuc < core.dodgeSucCounter)
         {
-            AddReward(3.0f);
+            AddReward(3.0f * fRwd);
             dodgeInProgress = false;
             dodgeTimer = 0;
         }
         else if (dodgeTimer >= DODGE_TIME_OUT)
         {
-            AddReward(-1.0f);
+            AddReward(-1.0f * fPnlt);
             dodgeInProgress = false;
             dodgeTimer = 0;
         }
+    }
+
+    float CalcAngle()
+    {
+        Vector3 toEnemy = enemyInfo.Position - thisInfo.Position;
+        return Vector3.Dot(toEnemy.normalized, thisInfo.Forward);
     }
 }

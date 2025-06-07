@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sword_ManRL_Defensive
       objectReference: {fileID: 0}
+    - target: {fileID: 4438051587577743289, guid: 7d07a4cab2df9b941b6fae1b5dbfbedc, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5204522747760277172, guid: 7d07a4cab2df9b941b6fae1b5dbfbedc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

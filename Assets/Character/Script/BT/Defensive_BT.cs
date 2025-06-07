@@ -116,7 +116,8 @@ public class Defensive_BT : MonoBehaviour
         {
             // enemy 반대 방향으로 이동
             Vector3 awayDir = (transform.position - enemy.position).normalized;
-            core.HandleMovement(awayDir.x, awayDir.z);
+            if (core.CanMove())
+                core.HandleMovement(awayDir.x, awayDir.z);
 
             // NavMeshAgent 사용 시, 현재 위치에서 minDistance만큼 떨어진 지점으로 목적지 설정
             if (agent != null)
@@ -167,7 +168,8 @@ public class Defensive_BT : MonoBehaviour
                 Vector3 toCenter = (Center - transform.position).normalized;
                 float centerWeight = 0.3f;
                 Vector3 fleeDir = (awayFromEnemy * (1f - centerWeight) + toCenter * centerWeight).normalized;
-                core.HandleMovement(fleeDir.x, fleeDir.z);
+                if (core.CanMove())
+                    core.HandleMovement(fleeDir.x, fleeDir.z);
                 if (agent != null)
                     agent.ResetPath();
             }
@@ -206,7 +208,9 @@ public class Defensive_BT : MonoBehaviour
             case PlayerState.Idle:
             case PlayerState.Moving:
                 Vector3 dir = (enemy.position - transform.position).normalized;
-                core.HandleMovement(dir.x, dir.z);
+                float dist = Vector3.Distance(enemy.position, transform.position);
+                if (core.CanMove() && dist > 0.8f)
+                    core.HandleMovement(dir.x, dir.z);
                 if (enemy != null)
                 {
                     if (!inRange && !isFleeing)

@@ -62,11 +62,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_Interpolate
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_IsKinematic
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8305256124134787262, guid: b5c94dc7cf1ca924c8a0cce175d6a120, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
@@ -137,6 +137,8 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
+  enemy: {fileID: 0}
+  activateWriteCSV: 0
 --- !u!114 &8816987362773958233
 MonoBehaviour:
   m_ObjectHideFlags: 0

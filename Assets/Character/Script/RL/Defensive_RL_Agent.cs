@@ -67,7 +67,7 @@ public class Defensive_RL_Agent : Agent
             enemyInfo = enemy.GetComponent<CharacterInfo>();
         }
 
-        prevHP = thisInfo.CurrentHP;
+        prevHP = 100;
     }
 
     public override void OnEpisodeBegin()

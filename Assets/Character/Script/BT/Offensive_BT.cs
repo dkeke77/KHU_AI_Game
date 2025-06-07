@@ -64,10 +64,10 @@ public class Offensive_BT : MonoBehaviour
         if (agent != null && core != null)
             agent.speed = core.speed;
 
-        // 시작하자마자 공격/방어/구르기 불가
-        core.attackTimer = 1.0f;
-        core.defenceTimer = 1.0f;
-        core.dodgeTimer = 1.0f;
+        // // 시작하자마자 공격/방어/구르기 불가
+        //core.attackTimer = 1.0f;
+        //core.defenceTimer = 1.0f;
+        //core.dodgeTimer = 1.0f;
     }
 
     void Update()
@@ -131,7 +131,8 @@ public class Offensive_BT : MonoBehaviour
                 Vector3 toCenter = (Center - transform.position).normalized;
                 float centerWeight = 0.3f;
                 Vector3 fleeDir = (awayFromEnemy * (1f - centerWeight) + toCenter * centerWeight).normalized;
-                core.HandleMovement(fleeDir.x, fleeDir.z);
+                if (core.CanMove())
+                    core.HandleMovement(fleeDir.x, fleeDir.z);
                 if (agent != null)
                     agent.ResetPath();
             }
@@ -154,7 +155,9 @@ public class Offensive_BT : MonoBehaviour
             case PlayerState.Idle:
             case PlayerState.Moving:
                 Vector3 dir = (enemy.position - transform.position).normalized;
-                core.HandleMovement(dir.x, dir.z);
+                float dist = Vector3.Distance(enemy.position, transform.position);
+                if (core.CanMove() && dist > 0.8f)
+                    core.HandleMovement(dir.x, dir.z);
                 if (enemy != null)
                 {
                     // 1. 범위 밖 -> 접근

@@ -100,8 +100,6 @@ public class CharacterCore : MonoBehaviour
         hitTimer -= Time.deltaTime;
         if (hitTimer < 0f) hitTimer = 0f;
 
-        isCollideWithCharacter = chCllChecker.isCollideWithCharacter && !isDead;
-
         if (cur_hp <= 0)
             Die();
     }
@@ -203,7 +201,11 @@ public class CharacterCore : MonoBehaviour
         while (timer < duration)
         {
             float scale = -Mathf.Pow(timer - 0.4f, 2.0f) * 3 + 1;
-            transform.position = ClampVector3(transform.position + dodgeVec * dodgeSpeed * Time.deltaTime * Mathf.Max(scale, 0));
+            if (!isCollideWithCharacter)
+                transform.position = ClampVector3(transform.position + dodgeVec * dodgeSpeed * Time.deltaTime * Mathf.Max(scale, 0));
+            else
+                Debug.Log("#$#$#$#$#$");
+
             timer += Time.deltaTime;
             yield return null;
         }
@@ -229,6 +231,19 @@ public class CharacterCore : MonoBehaviour
         input.x = Mathf.Clamp(input.x, bnd.min.x, bnd.max.x);
         input.z = Mathf.Clamp(input.z, bnd.min.z, bnd.max.z);
         return input;
+    }
+
+    public bool isInBoundary(float tolerance = 0.15f)
+    {
+        float dist_x0 = Mathf.Abs(transform.position.x - bnd.min.x);
+        float dist_x1 = Mathf.Abs(transform.position.x - bnd.max.x);
+        float dist_y0 = Mathf.Abs(transform.position.y - bnd.min.y);
+        float dist_y1 = Mathf.Abs(transform.position.y - bnd.max.y);
+
+        if (dist_x0 <= tolerance || dist_x1 <= tolerance || dist_y0 <= tolerance || dist_y1 <= tolerance)
+            return true;
+        else
+            return false;
     }
 
     public void Spawn()
@@ -271,13 +286,19 @@ public class CharacterCore : MonoBehaviour
     {
         if (isDead) return;
 
+        isCollideWithCharacter = false;
+
         foreach (ContactPoint contact in collision.contacts)
         {
             Collider myCollider = contact.thisCollider; // 내 collider
             Collider theirCollider = contact.otherCollider; // 상대 collider
 
+            if (myCollider.CompareTag("CharacterBody") && theirCollider.CompareTag("CharacterBody"))
+            {
+                isCollideWithCharacter = true;
+            }
             // 공격함
-            if (myCollider.CompareTag("Weapon") && theirCollider.CompareTag("CharacterBody"))
+            else if (myCollider.CompareTag("Weapon") && theirCollider.CompareTag("CharacterBody"))
             {
                 CharacterCore eCore = theirCollider.gameObject.GetComponentInParent<CharacterCore>();
 
