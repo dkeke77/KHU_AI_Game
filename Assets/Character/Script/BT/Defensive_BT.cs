@@ -152,7 +152,8 @@ public class Defensive_BT : MonoBehaviour
             core.state == PlayerState.Defending ||
             core.state == PlayerState.Dodging)
         {
-            agent.ResetPath();
+            if (agent != null)
+                agent.ResetPath();
             return;
         }
 
@@ -167,7 +168,8 @@ public class Defensive_BT : MonoBehaviour
                 float centerWeight = 0.3f;
                 Vector3 fleeDir = (awayFromEnemy * (1f - centerWeight) + toCenter * centerWeight).normalized;
                 core.HandleMovement(fleeDir.x, fleeDir.z);
-                agent.ResetPath();
+                if (agent != null)
+                    agent.ResetPath();
             }
 
             // 도망중에 상대 공격
@@ -179,7 +181,8 @@ public class Defensive_BT : MonoBehaviour
                     core.HandleMovement(0, 0);
                     LookAtEnemy();
                     core.Defence();
-                    agent.ResetPath();
+                    if (agent != null)
+                        agent.ResetPath();
                     isFleeing = false;
                     fleeTimer = 0f;
                     return;
@@ -190,7 +193,8 @@ public class Defensive_BT : MonoBehaviour
                 else if (!core.CanDefence() && core.CanDodge())
                 {
                     core.Dodge();
-                    agent.ResetPath();
+                    if (agent != null)
+                        agent.ResetPath();
                 }
             }
             return;
@@ -206,7 +210,10 @@ public class Defensive_BT : MonoBehaviour
                 if (enemy != null)
                 {
                     if (!inRange && !isFleeing)
-                        agent.SetDestination(enemy.position);
+                    {
+                        if (agent != null)
+                            agent.SetDestination(enemy.position);
+                    }
                     else
                         core.HandleMovement(0, 0);
 
@@ -225,7 +232,8 @@ public class Defensive_BT : MonoBehaviour
                                     core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Defence();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     Flee();
                                 }
 
@@ -233,7 +241,8 @@ public class Defensive_BT : MonoBehaviour
                                 else if (!core.CanDefence() && core.CanDodge())
                                 {
                                     core.Dodge();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                 }
 
                                 // 3. 내가 방어/회피 불가능 + 내가 공격 가능 -> 공격 후 도망
@@ -242,14 +251,16 @@ public class Defensive_BT : MonoBehaviour
                                     core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     Flee();
                                 }
 
                                 // 4. 내가 전부 불가능 -> 도망
                                 else
                                 {
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     Flee();
                                 }
                             }
@@ -263,14 +274,16 @@ public class Defensive_BT : MonoBehaviour
                                     core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     Flee();
                                 }
 
                                 // 6. 내가 공격 불가 -> 거리 벌리기
                                 else
                                 {
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     KeepDistanceFromEnemy(3.0f);
                                 }
                             }
@@ -282,7 +295,8 @@ public class Defensive_BT : MonoBehaviour
             case PlayerState.Attacking:
             case PlayerState.Dodging:
             case PlayerState.Dead:
-                agent.ResetPath();
+                if (agent != null)
+                    agent.ResetPath();
                 break;
         }
     }

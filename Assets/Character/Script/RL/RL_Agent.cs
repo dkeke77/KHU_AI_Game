@@ -15,6 +15,9 @@ public class RL_Agent : Agent
     CharacterCore enemyCore;
     CharacterInfo enemyInfo;
 
+    CSVWriter csvWriter;
+    public bool activateWriteCSV = false;
+
     // Enemy hit
     float oldEnemyHP;
 
@@ -42,6 +45,7 @@ public class RL_Agent : Agent
         
         core = GetComponent<CharacterCore>();
         thisInfo = GetComponent<CharacterInfo>();
+        csvWriter = GetComponentInParent<CSVWriter>();
 
         if (enemy == null)
         {
@@ -76,6 +80,17 @@ public class RL_Agent : Agent
         enemyCore.Spawn();
 
         Debug.Log("New Episode Begins");
+    }
+
+    void ExecuteEpisodeEnd()
+    {
+        string winner = "";
+        if (core.isDead)
+            winner = enemy.name;
+        else if (enemyCore.isDead)
+            winner = this.name;
+        csvWriter.WriteRLCombatData(winner);
+        EndEpisode();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -149,13 +164,13 @@ public class RL_Agent : Agent
         if (thisInfo.IsDead)
         {
             AddReward(-2.0f);
-            EndEpisode();
+            ExecuteEpisodeEnd();
             return;
         }
         else if (enemyInfo.IsDead)
         {
             AddReward(3.0f);
-            EndEpisode();
+            ExecuteEpisodeEnd();
             return;
         }
 

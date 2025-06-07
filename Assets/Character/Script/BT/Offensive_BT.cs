@@ -74,7 +74,8 @@ public class Offensive_BT : MonoBehaviour
     {
         if (core.isDead)
         {
-            agent.ResetPath();
+            if (agent != null)
+                agent.ResetPath();
             return;
         }
 
@@ -131,7 +132,8 @@ public class Offensive_BT : MonoBehaviour
                 float centerWeight = 0.3f;
                 Vector3 fleeDir = (awayFromEnemy * (1f - centerWeight) + toCenter * centerWeight).normalized;
                 core.HandleMovement(fleeDir.x, fleeDir.z);
-                agent.ResetPath();
+                if (agent != null)
+                    agent.ResetPath();
             }
             return;
         }
@@ -141,7 +143,8 @@ public class Offensive_BT : MonoBehaviour
             core.state == PlayerState.Defending ||
             core.state == PlayerState.Dodging)
         {
-            agent.ResetPath();
+            if (agent != null)
+                agent.ResetPath();
             return;
         }
 
@@ -156,7 +159,10 @@ public class Offensive_BT : MonoBehaviour
                 {
                     // 1. 범위 밖 -> 접근
                     if (!inRange && !isFleeing)
-                        agent.SetDestination(enemy.position);
+                    {
+                        if (agent != null)
+                            agent.SetDestination(enemy.position);
+                    }
                     else
                         core.HandleMovement(0, 0);
 
@@ -175,14 +181,16 @@ public class Offensive_BT : MonoBehaviour
                                     core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                     Flee();
                                 }
                                 // 3. 공격 불가 + 회피 가능 -> 회피
                                 else if (!core.CanAttack() && core.CanDodge())
                                 {
                                     core.Dodge();
-                                    agent.ResetPath();
+                                    if (agent != null)
+                                        agent.ResetPath();
                                 }
                             }
                         }
@@ -193,7 +201,8 @@ public class Offensive_BT : MonoBehaviour
             case PlayerState.Attacking:
             case PlayerState.Dodging:
             case PlayerState.Dead:
-                agent.ResetPath();
+                if (agent != null)
+                    agent.ResetPath();
                 break;
         }
     }
@@ -218,6 +227,7 @@ public class Offensive_BT : MonoBehaviour
 
     void OnGUI()
     {
+        /*
         GUI.Label(new Rect(1500, 10, 300, 20), $"Offensive: {core.cur_hp}");
         GUI.Label(new Rect(1500, 30, 300, 20), $"Offensive isBlocking: {core.isBlocking}");
         GUI.Label(new Rect(1500, 50, 300, 20), $"Offensive isAttacking: {core.isAttacking}");
@@ -227,6 +237,6 @@ public class Offensive_BT : MonoBehaviour
         GUI.Label(new Rect(1500, 130, 300, 20), $"Offensive canDefence: {core.CanDefence()}");
         GUI.Label(new Rect(1500, 150, 300, 20), $"Offensive canAttack: {core.CanAttack()}");
         GUI.Label(new Rect(1500, 170, 300, 20), $"Offensive canDodge: {core.CanDodge()}");
-
+        */
     }
 }
