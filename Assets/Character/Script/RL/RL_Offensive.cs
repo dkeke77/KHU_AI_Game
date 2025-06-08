@@ -138,7 +138,6 @@ public class RL_Offensive : Agent
                     if (core.CanAttack())
                     {
                         core.Attack();
-                        Debug.Log(CalcAngle());
 
                         attackInProgress = true;
                         attacked = true;
@@ -187,50 +186,46 @@ public class RL_Offensive : Agent
             AddReward(-0.01f);
         }
         // 경계에 너무 오래 있을 시
-        if (core.isInBoundary())
+        if (core.isInBoundary() && StepCount > 600000)
         {
             boundaryTimer++;
 
-            if (boundaryTimer > 100)
-            {
-                AddReward(-0.001f);
-            }
-            else if (boundaryTimer > 10)
-                AddReward(-0.0005f);
+            if (boundaryTimer > 10)
+                AddReward(-0.01f);
         }
         else
             boundaryTimer = 0;
 
         // 커리큘럼
-        if (StepCount < 600000)
+        if (StepCount < 1000000)
         {
             curriculumLevel0();
             if (attackInProgress)
-                EvaluateAttackReward(fRwd:1.2f,fPnlt:0.5f);
+                EvaluateAttackReward(fRwd:1.2f,fPnlt:0.2f);
             if (defenceInProgress)
-                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 0.8f);
+                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 0.2f);
             if (dodgeInProgress)
-                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 0.8f);
+                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 0.2f);
         }
-        else if (StepCount < 1500000)
+        else if (StepCount < 1900000)
         {
             curriculumLevel1();
             if (attackInProgress)
-                EvaluateAttackReward(fRwd: 1.2f, fPnlt: 1.0f);
+                EvaluateAttackReward(fRwd: 1.2f, fPnlt: 0.6f);
             if (defenceInProgress)
-                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 1.0f);
+                EvaluateDenfenceReward(fRwd: 1.2f, fPnlt: 0.6f);
             if (dodgeInProgress)
-                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 1.0f);
+                EvaluateDodgeReward(fRwd: 1.2f, fPnlt: 0.6f);
         }
         else
         {
             curriculumLevel2();
             if (attackInProgress)
-                EvaluateAttackReward(fRwd: 1.0f, fPnlt: 1.2f);
+                EvaluateAttackReward(fRwd: 1.0f, fPnlt: 1.0f);
             if (defenceInProgress)
-                EvaluateDenfenceReward(fRwd: 1.0f, fPnlt: 1.2f);
+                EvaluateDenfenceReward(fRwd: 1.0f, fPnlt: 1.0f);
             if (dodgeInProgress)
-                EvaluateDodgeReward(fRwd: 1.0f, fPnlt: 1.2f);
+                EvaluateDodgeReward(fRwd: 1.0f, fPnlt: 1.0f);
         }
 
         oldAttackSuc = core.attackSucCounter;
@@ -245,16 +240,17 @@ public class RL_Offensive : Agent
         // 거리 가까우면 리워드
         if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) < 5.0f)
         {
-            AddReward(0.0005f);
+            AddReward(0.05f);
+        }
+        if (Vector3.Distance(thisInfo.Position, core.floor.position) < 4.0f)
+        {
+            float factor = (4 - Vector3.Distance(thisInfo.Position, core.floor.position)) / 4;
+            AddReward(0.05f * factor);
         }
         // 공격방향 리워드
-        if (attacked && CalcAngle() > 0.6f)
+        if (attacked)
         {
-            AddReward(0.5f);
-        }
-        if (!core.isInBoundary())
-        {
-            AddReward(0.000001f);
+            AddReward(0.4f * CalcAngle());
         }
     }
 
@@ -263,20 +259,24 @@ public class RL_Offensive : Agent
         // 거리 가까우면 리워드
         if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) < 4.0f)
         {
-            AddReward(0.00001f);
+            AddReward(0.01f);
         }
+
         //공격 관련 처리
         if (attacked)
         {
             // 공격방향 패널티
-            if (CalcAngle() < 0.6f)
-                AddReward(-0.1f);
-
-            // 적 방어/회피 쿨타임 중 공격 시 리워드
-            if (enemyCore.defenceTimer > 0)
-                AddReward(0.3f);
-            if (enemyCore.dodgeTimer > 0)
-                AddReward(0.3f);
+            if (CalcAngle() > 0.6f)
+            {
+                AddReward(0.1f);
+                // 적 방어/회피 쿨타임 중 공격 시 리워드
+                if (enemyCore.defenceTimer > 0)
+                    AddReward(0.3f);
+                if (enemyCore.dodgeTimer > 0)
+                    AddReward(0.3f);
+            }
+            else
+                AddReward(Mathf.Clamp(0.3f * (CalcAngle() - 1) / 2, -0.25f, 0f));
         }
     }
 
@@ -285,20 +285,22 @@ public class RL_Offensive : Agent
         // 거리 멀면 패널티
         if (Vector3.Distance(thisInfo.Position, enemyInfo.Position) > 6.0f)
         {
-            AddReward(-0.00005f);
+            AddReward(-0.005f);
         }
         //공격 관련 처리
         if (attacked)
         {
             // 공격방향 패널티
             if (CalcAngle() < 0.6f)
-                AddReward(-0.5f);
-
-            // 적 방어/회피 쿨타임 중 공격 시 리워드
-            if (enemyCore.defenceTimer > 0)
-                AddReward(0.25f);
-            if (enemyCore.dodgeTimer > 0)
-                AddReward(0.25f);
+                AddReward(Mathf.Clamp(0.5f * (CalcAngle() - 1) / 2, -0.25f, 0f));
+            else
+            {
+                // 적 방어/회피 쿨타임 중 공격 시 리워드
+                if (enemyCore.defenceTimer > 0)
+                    AddReward(0.25f);
+                if (enemyCore.dodgeTimer > 0)
+                    AddReward(0.25f);
+            }
         }
     }
 

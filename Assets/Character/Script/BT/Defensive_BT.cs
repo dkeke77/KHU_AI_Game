@@ -44,13 +44,13 @@ public class Defensive_BT : MonoBehaviour
                 {
                     var root = obj.transform.root;
                     var core = root.GetComponent<CharacterCore>();
-                    if (core != null && root != this.transform) 
+                    if (core != null && root != this.transform)
                     {
                         enemy = root;
                         enemyCore = core;
                         break;
                     }
-                    
+
                 }
             }
         }
@@ -180,7 +180,7 @@ public class Defensive_BT : MonoBehaviour
                 // 방어 가능 -> 방어 후 방어 타이머 리필
                 if (core.CanDefence())
                 {
-                    core.HandleMovement(0, 0);
+                    //core.HandleMovement(0, 0);
                     LookAtEnemy();
                     core.Defence();
                     if (agent != null)
@@ -208,8 +208,7 @@ public class Defensive_BT : MonoBehaviour
             case PlayerState.Idle:
             case PlayerState.Moving:
                 Vector3 dir = (enemy.position - transform.position).normalized;
-                float dist = Vector3.Distance(enemy.position, transform.position);
-                if (core.CanMove() && dist > 0.8f)
+                if (core.CanMove() && distanceToEnemy > 0.9f)
                     core.HandleMovement(dir.x, dir.z);
                 if (enemy != null)
                 {
@@ -218,8 +217,8 @@ public class Defensive_BT : MonoBehaviour
                         if (agent != null)
                             agent.SetDestination(enemy.position);
                     }
-                    else
-                        core.HandleMovement(0, 0);
+                    //else
+                    //core.HandleMovement(0, 0);
 
                     // 도망치는 중이 아님
                     if (!isFleeing)
@@ -230,16 +229,33 @@ public class Defensive_BT : MonoBehaviour
                             // 상대가 공격중
                             if (enemyIsAttacking)
                             {
-                                // 1. 내가 방어 가능 -> 방어 후 도망
-                                if (core.CanDefence())
+                                // 방어 우선 확률을 55%로 설정해 공격 기회 ↑ (방어 실패 시에 회피/공격 기회가 상승)
+                                if (core.CanDefence() && Random.value < 0.55f)
                                 {
-                                    core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Defence();
                                     if (agent != null)
-                                        agent.ResetPath();
+                                        agent?.ResetPath();
                                     Flee();
+                                    return;
                                 }
+                                else if (core.CanDodge())
+                                {
+                                    core.Dodge();
+                                    if (agent != null)
+                                        agent?.ResetPath();
+                                    return;
+                                }
+                                //// 1. 내가 방어 가능 -> 방어 후 도망 -> 원본 코드
+                                //if (core.CanDefence())
+                                //{
+                                //    //core.HandleMovement(0, 0);
+                                //    LookAtEnemy();
+                                //    core.Defence();
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    Flee();
+                                //}
 
                                 // 2. 내가 방어 불가능 + 내가 회피 가능 -> 회피
                                 else if (!core.CanDefence() && core.CanDodge())
@@ -250,9 +266,9 @@ public class Defensive_BT : MonoBehaviour
                                 }
 
                                 // 3. 내가 방어/회피 불가능 + 내가 공격 가능 -> 공격 후 도망
-                                else if(!core.CanDefence() && !core.CanDodge() && core.CanAttack())
+                                else if (!core.CanDefence() && !core.CanDodge() && core.CanAttack())
                                 {
-                                    core.HandleMovement(0, 0);
+                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)
@@ -270,26 +286,52 @@ public class Defensive_BT : MonoBehaviour
                             }
 
                             // 상대가 공격중 아님
-                            else 
+                            else
                             {
-                                // 5. 내가 공격 가능 -> 공격 후 도망
-                                if (core.CanAttack())
+                                // 적이 비공격 시 반격 기회 (반격 시도 확률 40%로 설정) (공격 빈도 감소 및 방어/회피 강화)
+                                if (!enemyIsAttacking && core.CanAttack() && Random.value < 0.4f)
                                 {
-                                    core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)
-                                        agent.ResetPath();
+                                        agent?.ResetPath();
                                     Flee();
+                                    return;
                                 }
-
-                                // 6. 내가 공격 불가 -> 거리 벌리기
-                                else
+                                // 공격 불가 시 적당 거리 유지
+                                if (!core.CanAttack())
                                 {
                                     if (agent != null)
-                                        agent.ResetPath();
-                                    KeepDistanceFromEnemy(3.0f);
+                                        agent?.ResetPath();
+                                    KeepDistanceFromEnemy(attackRange + 0.5f);
                                 }
+                                // 그 외 15% 확률로 회피 추가 (대기 중 일정 확률로 회피 -> 예측성 하락)
+                                else if (core.CanDodge() && Random.value < 0.15f)
+                                {
+                                    core.Dodge();
+                                    if (agent != null)
+                                        agent?.ResetPath();
+                                }
+
+                                // 원본 코드 주석 처리
+                                //// 5. 내가 공격 가능 -> 공격 후 도망
+                                //if (core.CanAttack())
+                                //{
+                                //    //core.HandleMovement(0, 0);
+                                //    LookAtEnemy();
+                                //    core.Attack();
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    Flee();
+                                //}
+
+                                //// 6. 내가 공격 불가 -> 거리 벌리기
+                                //else
+                                //{
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    KeepDistanceFromEnemy(3.0f);
+                                //}
                             }
                         }
                     }
@@ -339,4 +381,3 @@ public class Defensive_BT : MonoBehaviour
         GUI.Label(new Rect(70, 170, 300, 20), $"Defensive canDodge: {core.CanDodge()}");*/
     }
 }
-

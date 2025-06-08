@@ -9,6 +9,8 @@ TagManager:
   - Defensive_BT
   - Offensive_BT
   - CharacterBody
+  - AttackAgent
+  - DefenseAgent
   layers:
   - Default
   - TransparentFX
