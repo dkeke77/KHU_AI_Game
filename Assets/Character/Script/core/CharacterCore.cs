@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events; // UI 매핑 추가_0607
 
 public enum PlayerState
 {
@@ -16,7 +18,14 @@ public class CharacterCore : MonoBehaviour
     public const int MAX_HP = 100;
 
     public int cur_hp = 100;
-    
+
+    [Header("Label")] // UI 매핑 추가_0607
+    public GameObject labelPrefab; // 머리 위 라벨 프리팹 연결할 슬롯
+
+    [Header("Cooldown UI")]
+    public CooldownManager_Attack attackUI; // 공격형 에이전트용 쿨타임 UI
+    public CooldownManager_Defense defenseUI; // 수비형 에이전트용 쿨타임 UI
+
     // 전투 데이터
     public int dodgeCounter = 0;
     public int dodgeSucCounter = 0;
@@ -45,7 +54,6 @@ public class CharacterCore : MonoBehaviour
     const float ATTACK_COOLDOWN = 2.5f;
     const float DEFENCE_COOLDOWN = 2.5f;
     const float DODGE_COOLDOWN = 5.0f;
-    
 
     // 공격/방어 타이머 추가
     public float attackTimer = 0f;
@@ -67,6 +75,15 @@ public class CharacterCore : MonoBehaviour
 
     public PlayerState state = PlayerState.Idle;
 
+    // 사망 시 호출할 이벤트
+    public UnityEvent OnDead = new UnityEvent();
+
+    // 태그로 수비형 에이전트인지 구분
+    bool IsDefenseAgent()
+    {
+        return CompareTag("DefenseAgent");
+    }
+
     void Awake()
     {
         anim = GetComponentInChildren<Animator>();
@@ -81,6 +98,26 @@ public class CharacterCore : MonoBehaviour
         //attackTimer = 0;
         //defenceTimer = 0;
         //dodgeTimer = 0;
+    }
+
+    void Start() // UI 매핑 추가_0607
+    {
+        // 라벨 생성 -> 캐릭터 머리 위 구분 라벨(공격형/수비형)
+        if (labelPrefab != null)
+        {
+            var lblGO = Instantiate(labelPrefab, transform);
+            // 머리 위 오프셋
+            lblGO.transform.localPosition = new Vector3(0, 2.2f, 0);
+
+            // 텍스트 세팅
+            var tmp = lblGO.GetComponentInChildren<TextMeshPro>();
+            if (tmp != null)
+            {
+                bool isAtk = CompareTag("AttackAgent");
+                tmp.text = isAtk ? "AT Agent" : "DF Agent";
+                tmp.color = isAtk ? Color.red : Color.blue;
+            }
+        }
     }
 
     void Update()
@@ -102,6 +139,22 @@ public class CharacterCore : MonoBehaviour
 
         if (cur_hp <= 0)
             Die();
+
+        // 동작 테스트용 점검 코드
+        if (Input.GetKeyDown(KeyCode.Space)) // 공격 -> 스페이스바
+        {
+            Attack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) // 방어 -> 왼쪽 시프트
+        {
+            Defence();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl)) // 회피 -> 왼쪽 컨트롤
+        {
+            Dodge();
+        }
     }
 
     public bool CanMove()
@@ -148,6 +201,17 @@ public class CharacterCore : MonoBehaviour
         isAttacking = false; // 추가
         state = PlayerState.Idle;
         attackTimer = ATTACK_COOLDOWN; // 수정
+
+        // Attack UI 트리거 (index 0)
+        if (attackUI != null)
+        {
+            attackUI.TriggerCooldown(0);
+        }
+        else if (defenseUI != null)
+        {
+            // 수비 에이전트인 경우 defenseUI 로도 동일 슬롯(0)을 트리거
+            defenseUI.TriggerCooldown(0);
+        }
     }
 
     public bool CanDefence()
@@ -173,6 +237,12 @@ public class CharacterCore : MonoBehaviour
         anim.SetTrigger("releaseDefence");
         state = PlayerState.Idle;
         defenceTimer = DEFENCE_COOLDOWN; // 수정
+
+        // Defence UI 트리거 (index 1)
+        if (IsDefenseAgent() && defenseUI != null)
+            defenseUI.TriggerCooldown(1);
+        else if (attackUI != null)
+            attackUI.TriggerCooldown(1);
     }
 
     public bool CanDodge()
@@ -212,6 +282,12 @@ public class CharacterCore : MonoBehaviour
         isDodging = false;
         state = PlayerState.Idle;
         dodgeTimer = DODGE_COOLDOWN;
+
+        // Dodge UI 트리거 (index 2)
+        if (IsDefenseAgent() && defenseUI != null)
+            defenseUI.TriggerCooldown(2);
+        else if (attackUI != null)
+            attackUI.TriggerCooldown(2);
     }
 
     void Die()
@@ -271,7 +347,7 @@ public class CharacterCore : MonoBehaviour
             isDead = false;
             anim.speed = 1f;
             anim.SetBool("isDead", false);
-            anim.Play("Idle",0,0f);
+            anim.Play("Idle", 0, 0f);
         }
 
         attackCounter = 0;
@@ -280,6 +356,14 @@ public class CharacterCore : MonoBehaviour
         attackSucCounter = 0;
         blockSucCounter = 0;
         dodgeSucCounter = 0;
+
+        OnDead.Invoke(); // OnDead 이벤트 발동_0607 추가
+    }
+
+    // 다음 에피소드 준비용 초기화
+    public void ResetCharacter()
+    {
+        Spawn();
     }
 
     void OnCollisionEnter(Collision collision)

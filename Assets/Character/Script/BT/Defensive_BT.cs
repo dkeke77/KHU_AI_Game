@@ -12,22 +12,22 @@ public class Defensive_BT : MonoBehaviour
     [Header("Combat Settings")]
     public float attackRange = 2f;
 
-    // »ó´ë °ø°Ý °¡´É ¿©ºÎ °ü¸® º¯¼ö
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool enemyIsAttacking = false;
     public float enemyAttackTimer = 0;
     private bool prevEnemyIsAttacking = false;
 
-    // »ó´ë CharacterCore
+    // ï¿½ï¿½ï¿½ CharacterCore
     private CharacterCore enemyCore;
 
-    // µµ¸Á »óÅÂ °ü¸® º¯¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool isFleeing = false;
     private float fleeTimer = 0f;
     private const float FLEE_DURATION = 3.0f;
 
     void Start()
     {/*
-        // ·£´ý ½ºÆù À§Ä¡ ¼³Á¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         float randX = Random.Range(-10f, -5f);
         float randZ = Random.Range(-5f, 5f);
         transform.position = new Vector3(randX, transform.position.y, randZ);*/
@@ -44,13 +44,13 @@ public class Defensive_BT : MonoBehaviour
                 {
                     var root = obj.transform.root;
                     var core = root.GetComponent<CharacterCore>();
-                    if (core != null && root != this.transform) 
+                    if (core != null && root != this.transform)
                     {
                         enemy = root;
                         enemyCore = core;
                         break;
                     }
-                    
+
                 }
             }
         }
@@ -64,7 +64,7 @@ public class Defensive_BT : MonoBehaviour
         if (agent != null && core != null)
             agent.speed = core.speed;
         /*
-        // ½ÃÀÛÇÏÀÚ¸¶ÀÚ °ø°Ý/¹æ¾î/±¸¸£±â ºÒ°¡
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½
         core.attackTimer = 1.0f;
         core.defenceTimer = 1.0f;
         core.dodgeTimer = 1.0f;*/
@@ -79,7 +79,7 @@ public class Defensive_BT : MonoBehaviour
             return;
         }
 
-        // »ó´ë °ø°Ý ½Ç½Ã ¿©ºÎ ¹Þ¾Æ¿À±â
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½
         enemyAttackTimer -= Time.deltaTime;
         if (enemyAttackTimer < 0f) enemyAttackTimer = 0f;
 
@@ -90,7 +90,7 @@ public class Defensive_BT : MonoBehaviour
         prevEnemyIsAttacking = enemyCore.isAttacking;
         enemyIsAttacking = (enemyAttackTimer > 0f) ? true : false;
 
-        // µµ¸Á »óÅÂ Å¸ÀÌ¸Ó
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½
         if (isFleeing)
         {
             fleeTimer += Time.deltaTime;
@@ -101,11 +101,11 @@ public class Defensive_BT : MonoBehaviour
             }
         }
 
-        // µ¿ÀÛ
+        // ï¿½ï¿½ï¿½ï¿½
         HandleState();
     }
 
-    // °Å¸® ¹ú¸®±â
+    // ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void KeepDistanceFromEnemy(float minDistance)
     {
         if (enemy == null || core == null)
@@ -114,12 +114,12 @@ public class Defensive_BT : MonoBehaviour
         float distance = Vector3.Distance(transform.position, enemy.position);
         if (distance < minDistance)
         {
-            // enemy ¹Ý´ë ¹æÇâÀ¸·Î ÀÌµ¿
+            // enemy ï¿½Ý´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             Vector3 awayDir = (transform.position - enemy.position).normalized;
             if (core.CanMove())
                 core.HandleMovement(awayDir.x, awayDir.z);
 
-            // NavMeshAgent »ç¿ë ½Ã, ÇöÀç À§Ä¡¿¡¼­ minDistance¸¸Å­ ¶³¾îÁø ÁöÁ¡À¸·Î ¸ñÀûÁö ¼³Á¤
+            // NavMeshAgent ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ minDistanceï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (agent != null)
             {
                 Vector3 targetPos = transform.position + awayDir * (minDistance - distance + 0.5f);
@@ -128,7 +128,7 @@ public class Defensive_BT : MonoBehaviour
         }
         else
         {
-            // ÀÌ¹Ì ÃæºÐÈ÷ ¸Ö¸é ¸ØÃã
+            // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             core.HandleMovement(0, 0);
             if (agent != null)
                 agent.ResetPath();
@@ -138,7 +138,7 @@ public class Defensive_BT : MonoBehaviour
 
     void HandleState()
     {
-        // µÑ Áß ÇÏ³ª »ç¸Á½Ã Á¾·á
+        // ï¿½ï¿½ ï¿½ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (core.isDead || enemyCore.isDead)
             return;
 
@@ -148,7 +148,7 @@ public class Defensive_BT : MonoBehaviour
         if (enemy == null || enemyCore == null)
             return;
 
-        // ÀÌ¹Ì °ø°Ý/¹æ¾î/È¸ÇÇ ÁßÀÌ¸é ¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½
+        // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½/È¸ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (core.state == PlayerState.Attacking ||
             core.state == PlayerState.Defending ||
             core.state == PlayerState.Dodging)
@@ -158,7 +158,7 @@ public class Defensive_BT : MonoBehaviour
             return;
         }
 
-        // µµ¸Á ¹æÇâ ¼³Á¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (isFleeing)
         {
             if (enemy != null)
@@ -174,10 +174,10 @@ public class Defensive_BT : MonoBehaviour
                     agent.ResetPath();
             }
 
-            // µµ¸ÁÁß¿¡ »ó´ë °ø°Ý
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (enemyIsAttacking)
             {
-                // ¹æ¾î °¡´É -> ¹æ¾î ÈÄ ¹æ¾î Å¸ÀÌ¸Ó ¸®ÇÊ
+                // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (core.CanDefence())
                 {
                     //core.HandleMovement(0, 0);
@@ -188,10 +188,10 @@ public class Defensive_BT : MonoBehaviour
                     isFleeing = false;
                     fleeTimer = 0f;
                     return;
-                    // Å¸ÀÌ¸Ó ¸®ÇÊ ±¸Çö ÇÊ¿ä
+                    // Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
                 }
 
-                // ¹æ¾î ºÒ°¡´É + È¸ÇÇ °¡´É -> È¸ÇÇ
+                // ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ + È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> È¸ï¿½ï¿½
                 else if (!core.CanDefence() && core.CanDodge())
                 {
                     core.Dodge();
@@ -202,7 +202,7 @@ public class Defensive_BT : MonoBehaviour
             return;
         }
 
-        // »óÅÂ¿¡ µû¶ó Çàµ¿ °áÁ¤
+        // ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½àµ¿ ï¿½ï¿½ï¿½ï¿½
         switch (core.state)
         {
             case PlayerState.Idle:
@@ -218,29 +218,46 @@ public class Defensive_BT : MonoBehaviour
                             agent.SetDestination(enemy.position);
                     }
                     //else
-                        //core.HandleMovement(0, 0);
+                    //core.HandleMovement(0, 0);
 
-                    // µµ¸ÁÄ¡´Â ÁßÀÌ ¾Æ´Ô
+                    // ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½
                     if (!isFleeing)
                     {
-                        // ¹üÀ§ ¾È
+                        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                         if (inRange)
                         {
-                            // »ó´ë°¡ °ø°ÝÁß
+                            // ï¿½ï¿½ë°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                             if (enemyIsAttacking)
                             {
-                                // 1. ³»°¡ ¹æ¾î °¡´É -> ¹æ¾î ÈÄ µµ¸Á
-                                if (core.CanDefence())
+                                // ï¿½ï¿½ï¿½ ï¿½ì¼± È®ï¿½ï¿½ï¿½ï¿½ 55%ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ ï¿½ï¿½ (ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¿ï¿½ È¸ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½)
+                                if (core.CanDefence() && Random.value < 0.55f)
                                 {
-                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Defence();
                                     if (agent != null)
-                                        agent.ResetPath();
+                                        agent?.ResetPath();
                                     Flee();
+                                    return;
                                 }
+                                else if (core.CanDodge())
+                                {
+                                    core.Dodge();
+                                    if (agent != null)
+                                        agent?.ResetPath();
+                                    return;
+                                }
+                                //// 1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
+                                //if (core.CanDefence())
+                                //{
+                                //    //core.HandleMovement(0, 0);
+                                //    LookAtEnemy();
+                                //    core.Defence();
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    Flee();
+                                //}
 
-                                // 2. ³»°¡ ¹æ¾î ºÒ°¡´É + ³»°¡ È¸ÇÇ °¡´É -> È¸ÇÇ
+                                // 2. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> È¸ï¿½ï¿½
                                 else if (!core.CanDefence() && core.CanDodge())
                                 {
                                     core.Dodge();
@@ -248,8 +265,8 @@ public class Defensive_BT : MonoBehaviour
                                         agent.ResetPath();
                                 }
 
-                                // 3. ³»°¡ ¹æ¾î/È¸ÇÇ ºÒ°¡´É + ³»°¡ °ø°Ý °¡´É -> °ø°Ý ÈÄ µµ¸Á
-                                else if(!core.CanDefence() && !core.CanDodge() && core.CanAttack())
+                                // 3. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½/È¸ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                                else if (!core.CanDefence() && !core.CanDodge() && core.CanAttack())
                                 {
                                     //core.HandleMovement(0, 0);
                                     LookAtEnemy();
@@ -259,7 +276,7 @@ public class Defensive_BT : MonoBehaviour
                                     Flee();
                                 }
 
-                                // 4. ³»°¡ ÀüºÎ ºÒ°¡´É -> µµ¸Á
+                                // 4. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½
                                 else
                                 {
                                     if (agent != null)
@@ -268,27 +285,53 @@ public class Defensive_BT : MonoBehaviour
                                 }
                             }
 
-                            // »ó´ë°¡ °ø°ÝÁß ¾Æ´Ô
-                            else 
+                            // ï¿½ï¿½ë°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½
+                            else
                             {
-                                // 5. ³»°¡ °ø°Ý °¡´É -> °ø°Ý ÈÄ µµ¸Á
-                                if (core.CanAttack())
+                                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ý°ï¿½ ï¿½ï¿½È¸ (ï¿½Ý°ï¿½ ï¿½Ãµï¿½ È®ï¿½ï¿½ 40%ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½/È¸ï¿½ï¿½ ï¿½ï¿½È­)
+                                if (!enemyIsAttacking && core.CanAttack() && Random.value < 0.4f)
                                 {
-                                    //core.HandleMovement(0, 0);
                                     LookAtEnemy();
                                     core.Attack();
                                     if (agent != null)
-                                        agent.ResetPath();
+                                        agent?.ResetPath();
                                     Flee();
+                                    return;
                                 }
-
-                                // 6. ³»°¡ °ø°Ý ºÒ°¡ -> °Å¸® ¹ú¸®±â
-                                else
+                                // ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+                                if (!core.CanAttack())
                                 {
                                     if (agent != null)
-                                        agent.ResetPath();
-                                    KeepDistanceFromEnemy(3.0f);
+                                        agent?.ResetPath();
+                                    KeepDistanceFromEnemy(attackRange + 0.5f);
                                 }
+                                // ï¿½ï¿½ ï¿½ï¿½ 15% È®ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ß°ï¿½ (ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¶ï¿½)
+                                else if (core.CanDodge() && Random.value < 0.15f)
+                                {
+                                    core.Dodge();
+                                    if (agent != null)
+                                        agent?.ResetPath();
+                                }
+
+                                // ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ ï¿½Ö¼ï¿½ Ã³ï¿½ï¿½
+                                //// 5. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                                //if (core.CanAttack())
+                                //{
+                                //    //core.HandleMovement(0, 0);
+                                //    LookAtEnemy();
+                                //    core.Attack();
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    Flee();
+                                //}
+
+                                //// 6. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ -> ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                                //else
+                                //{
+                                //    if (agent != null)
+                                //        agent.ResetPath();
+                                //    KeepDistanceFromEnemy(3.0f);
+                                //}
                             }
                         }
                     }
@@ -304,14 +347,14 @@ public class Defensive_BT : MonoBehaviour
         }
     }
 
-    // µµ¸Á
+    // ï¿½ï¿½ï¿½ï¿½
     void Flee()
     {
         isFleeing = true;
         fleeTimer = 0f;
     }
 
-    // °ø°Ý/¹æ¾î½Ã »ó´ë¿Í ¹æÇâ ¸ÂÃã
+    // ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     void LookAtEnemy()
     {
         if (enemy == null) return;
@@ -324,7 +367,7 @@ public class Defensive_BT : MonoBehaviour
         }
     }
 
-    // µð¹ö±×¿ë
+    // ï¿½ï¿½ï¿½ï¿½×¿ï¿½
     void OnGUI()
     {/*
         GUI.Label(new Rect(70, 10, 300, 20), $"Defensive: {core.cur_hp}");
@@ -338,4 +381,3 @@ public class Defensive_BT : MonoBehaviour
         GUI.Label(new Rect(70, 170, 300, 20), $"Defensive canDodge: {core.CanDodge()}");*/
     }
 }
-
