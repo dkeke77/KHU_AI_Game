@@ -72,7 +72,6 @@ public class Defensive_BT : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(core.speed);
         if (core.isDead)
         {
             agent.ResetPath();

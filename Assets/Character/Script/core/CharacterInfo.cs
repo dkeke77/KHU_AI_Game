@@ -60,6 +60,36 @@ public class CharacterInfo : MonoBehaviour
 
     }
 
+    public Vector3 NormalizedPosition()
+    {
+        Bounds bnd = core.floor.GetComponent<MeshCollider>().bounds;
+
+        Vector3 relativePos = this.Position - bnd.center;
+        float halfX = bnd.extents.x;
+        float halfZ = bnd.extents.z;
+
+        float normRelX = Mathf.Clamp(relativePos.x / halfX, -1f, 1f);
+        float normRelZ = Mathf.Clamp(relativePos.z / halfZ, -1f, 1f);
+
+        return new Vector3(normRelX, 0, normRelZ);
+    }
+
+    public float GetMaxDistOfFloor()
+    {
+        Bounds bnd = core.floor.GetComponent<MeshCollider>().bounds;
+        return Mathf.Sqrt(Mathf.Pow(bnd.size.x, 2) + Mathf.Pow(bnd.size.z, 2));
+    }
+
+    public float DistanceToBoundary()
+    {
+        Bounds bounds = core.floor.GetComponent<MeshCollider>().bounds;
+
+        float dx = Mathf.Min(this.Position.x - bounds.min.x, bounds.max.x - this.Position.x);
+        float dz = Mathf.Min(this.Position.z - bounds.min.z, bounds.max.z - this.Position.z);
+
+        return Mathf.Min(dx, dz); // 가장 가까운 방향의 거리
+    }
+
     public Vector3? GetJointPosition(string jointName)
     {
         if (!jointPaths.ContainsKey(jointName))

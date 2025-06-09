@@ -273,8 +273,6 @@ public class CharacterCore : MonoBehaviour
             float scale = -Mathf.Pow(timer - 0.4f, 2.0f) * 3 + 1;
             if (!isCollideWithCharacter)
                 transform.position = ClampVector3(transform.position + dodgeVec * dodgeSpeed * Time.deltaTime * Mathf.Max(scale, 0));
-            else
-                Debug.Log("#$#$#$#$#$");
 
             timer += Time.deltaTime;
             yield return null;
@@ -376,6 +374,8 @@ public class CharacterCore : MonoBehaviour
         {
             Collider myCollider = contact.thisCollider; // ³» collider
             Collider theirCollider = contact.otherCollider; // »ó´ë collider
+
+            Debug.Log(this.name + " : "+ myCollider.name + " : " + theirCollider.name);
 
             if (myCollider.CompareTag("CharacterBody") && theirCollider.CompareTag("CharacterBody"))
             {

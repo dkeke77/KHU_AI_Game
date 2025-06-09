@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_BehaviorName
       value: RL_Offensive
       objectReference: {fileID: 0}
+    - target: {fileID: 6321065758129080102, guid: 7d07a4cab2df9b941b6fae1b5dbfbedc, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636052710944430096, guid: 7d07a4cab2df9b941b6fae1b5dbfbedc, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 601930580598742650, guid: 7d07a4cab2df9b941b6fae1b5dbfbedc, type: 3}
     m_RemovedGameObjects: []

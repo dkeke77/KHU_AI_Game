@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System;
 
 public class CSVWriter : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class CSVWriter : MonoBehaviour
 
     CharacterCore Agent_ATK_core;
     CharacterCore Agent_DEF_core;
+    DateTime now;
 
     string Arena_name;
     string Agent_ATK_Type;
@@ -18,7 +20,9 @@ public class CSVWriter : MonoBehaviour
 
     public bool activate = false;
     public bool isRLInArena = false;
-    bool isLineWrited = false;
+    bool isRoundOver = false;
+
+    float waitTimer = 0;
 
     void Start()
     {
@@ -50,36 +54,62 @@ public class CSVWriter : MonoBehaviour
             Agent_DEF_core = Agent_DEF.GetComponent<CharacterCore>();
 
             Arena_name = transform.name;
-            filePath = $"{projectRoot}/CombatData/{Arena_name}--{Agent_DEF_Type}-{Agent_DEF_Type}.csv";
+            filePath = $"{projectRoot}/CombatData/{Arena_name}-{Agent_DEF_Type}-{Agent_DEF_Type}.csv";
 
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
             {
-                File.WriteAllText(filePath, string.Format("Winner,{0}-Total_Attack,{0}-Success_Attack,{0}-Total_Defence,{0}-Success_Defence,{0}-Total_Dodge,{0}-Success_Dodge,{1}-Total_Attack,{1}-Success_Attack,{1}-Total_Defence,{1}-Success_Defence,{1}-Total_Dodge,{1}-Success_Dodge", Agent_ATK_Type, Agent_DEF_Type));
+                File.Delete(filePath);
             }
+            if (isRLInArena)
+                File.WriteAllText(filePath, string.Format("Record_Time,Winner,{0}:Total_Attack,{0}:Success_Attack,{0}:Total_Defence,{0}:Success_Defence,{0}:Total_Dodge,{0}:Success_Dodge,{1}:Total_Attack,{1}:Success_Attack,{1}:Total_Defence,{1}:Success_Defence,{1}:Total_Dodge,{1}:Success_Dodge,Reward\n", Agent_ATK_Type, Agent_DEF_Type));
+            else
+                File.WriteAllText(filePath, string.Format("Record_Time,Winner,{0}:Total_Attack,{0}:Success_Attack,{0}:Total_Defence,{0}:Success_Defence,{0}:Total_Dodge,{0}:Success_Dodge,{1}:Total_Attack,{1}:Success_Attack,{1}:Total_Defence,{1}:Success_Defence,{1}:Total_Dodge,{1}:Success_Dodge\n", Agent_ATK_Type, Agent_DEF_Type));
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (activate) 
-        { 
+        if (activate)
+        {
             // 둘다 BT인 경우
-            if (!isRLInArena && !isLineWrited)
+            if (!isRLInArena)
             {
-                if (Agent_ATK_core.isDead)
+                if (Agent_ATK_core.isDead || Agent_DEF_core.isDead)
+                    isRoundOver = true;
+            }
+
+            // 4초 후 작성 및 에이전트 리스폰
+            if (isRoundOver)
+            {
+                waitTimer += Time.deltaTime;
+
+                if (waitTimer > 4.0f)
                 {
-                    WriteRLCombatData(Agent_DEF.name);
-                    isLineWrited = true;
-                }
-                else if (Agent_DEF_core.isDead)
-                {
-                    WriteRLCombatData(Agent_ATK.name);
-                    isLineWrited = true;
+                    if (Agent_ATK_core.isDead && Agent_DEF_core.isDead)
+                    {
+                        WriteRLCombatData("DRAW");
+                        isRoundOver = true;
+                    }
+                    else if (Agent_ATK_core.isDead)
+                    {
+                        WriteRLCombatData(Agent_DEF.name);
+                        isRoundOver = true;
+                    }
+                    else if (Agent_DEF_core.isDead)
+                    {
+                        WriteRLCombatData(Agent_ATK.name);
+                        isRoundOver = true;
+                    }
+
+                    Agent_ATK_core.Spawn();
+                    Agent_DEF_core.Spawn();
+                    isRoundOver = false;
+                    waitTimer = 0f;
                 }
             }
-        // 둘중 하나가 RL이라면 RL쪽에서 에피소드가 종료될때 호출
-        // 둘 다 RL이라면 한쪽만 호출되도록 설정해줘야함
+            // 둘중 하나가 RL이라면 RL쪽에서 에피소드가 종료될때 호출
+            // 둘 다 RL이라면 한쪽만 호출되도록 설정해줘야함
         }
     }
 
@@ -92,13 +122,44 @@ public class CSVWriter : MonoBehaviour
                 winner_type = Agent_ATK_Type;
             else if (Winner == Agent_DEF.name)
                 winner_type = Agent_DEF_Type;
+            else if (Winner == "DRAW")
+                winner_type = "DRAW";
 
-            WriteLine(new string[] {winner_type, $"{Agent_ATK_core.attackCounter}", $"{Agent_ATK_core.attackSucCounter}",
-                                    $"{Agent_ATK_core.blockCounter}", $"{Agent_ATK_core.blockSucCounter}",
-                                    $"{Agent_ATK_core.dodgeCounter}", $"{Agent_ATK_core.dodgeSucCounter}",
-                                    $"{Agent_DEF_core.attackCounter}", $"{Agent_DEF_core.attackSucCounter}",
-                                    $"{Agent_DEF_core.blockCounter}", $"{Agent_DEF_core.blockSucCounter}",
-                                    $"{Agent_DEF_core.dodgeCounter}", $"{Agent_DEF_core.dodgeSucCounter}",
+            now = DateTime.Now;
+
+            WriteLine(new string[] {now.ToString("MM/dd_HH:mm:ss"), winner_type,
+                $"{Agent_ATK_core.attackCounter}", $"{Agent_ATK_core.attackSucCounter}",
+                $"{Agent_ATK_core.blockCounter}", $"{Agent_ATK_core.blockSucCounter}",
+                $"{Agent_ATK_core.dodgeCounter}", $"{Agent_ATK_core.dodgeSucCounter}",
+                $"{Agent_DEF_core.attackCounter}", $"{Agent_DEF_core.attackSucCounter}",
+                $"{Agent_DEF_core.blockCounter}", $"{Agent_DEF_core.blockSucCounter}",
+                $"{Agent_DEF_core.dodgeCounter}", $"{Agent_DEF_core.dodgeSucCounter}"
+            });
+        }
+    }
+
+    public void WriteRLCombatDataByRL(string Winner, float reward)
+    {
+        if (activate)
+        {
+            string winner_type = "No Winner";
+            if (Winner == Agent_ATK.name)
+                winner_type = Agent_ATK_Type;
+            else if (Winner == Agent_DEF.name)
+                winner_type = Agent_DEF_Type;
+            else if (Winner == "DRAW")
+                winner_type = "DRAW";
+
+            now = DateTime.Now;
+
+            WriteLine(new string[] {now.ToString("MM/dd_HH:mm:ss"), winner_type,
+                $"{Agent_ATK_core.attackCounter}", $"{Agent_ATK_core.attackSucCounter}",
+                $"{Agent_ATK_core.blockCounter}", $"{Agent_ATK_core.blockSucCounter}",
+                $"{Agent_ATK_core.dodgeCounter}", $"{Agent_ATK_core.dodgeSucCounter}",
+                $"{Agent_DEF_core.attackCounter}", $"{Agent_DEF_core.attackSucCounter}",
+                $"{Agent_DEF_core.blockCounter}", $"{Agent_DEF_core.blockSucCounter}",
+                $"{Agent_DEF_core.dodgeCounter}", $"{Agent_DEF_core.dodgeSucCounter}",
+                $"{reward}"
             });
         }
     }

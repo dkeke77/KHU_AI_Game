@@ -663,6 +663,14 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 1343588992}
+    - target: {fileID: 4309639091399395687, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
+      propertyPath: MaxStep
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5740810342236915448, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6332728757100170466, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: floor
       value: 
@@ -670,10 +678,22 @@ PrefabInstance:
     - target: {fileID: 8055522915084704206, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: m_Model
       value: 
+      objectReference: {fileID: 5022602860645237092, guid: 84e2093396b8b9848bfbda8a47d9c68c, type: 3}
+    - target: {fileID: 8055522915084704206, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055522915084704206, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.m_NumContinuousActions
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055522915084704206, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
+      propertyPath: 'm_BrainParameters.m_ActionSpec.BranchSizes.Array.data[0]'
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8090775438600644700, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.00144
+      value: 2.15
       objectReference: {fileID: 0}
     - target: {fileID: 8090775438600644700, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -681,7 +701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8090775438600644700, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.48896
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8090775438600644700, guid: 6590ece7889f9244b85515f731153ccd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2982,9 +3002,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d932556f3cb224ca8b63c9fc861b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Agent_ATK: {fileID: 0}
-  Agent_DEF: {fileID: 0}
-  activate: 0
+  Agent_ATK: {fileID: 286800809}
+  Agent_DEF: {fileID: 1343588992}
+  activate: 1
   isRLInArena: 0
 --- !u!1 &1168224760
 GameObject:
@@ -3053,7 +3073,7 @@ PrefabInstance:
       objectReference: {fileID: 286800809}
     - target: {fileID: 6910366834396285199, guid: 6181ce2d88d800b4591dacde90f3cac5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.78
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6910366834396285199, guid: 6181ce2d88d800b4591dacde90f3cac5, type: 3}
       propertyPath: m_LocalPosition.y
